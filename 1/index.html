@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Ajay Bhargava: Colorizing the Prokudin-Gorskii Photo Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3eceb; /* Neutral grey background */
+            color: #333;
+        }
+
+        header {
+            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(to bottom, #ffffff 33.33%, #0000ff 33.33% 66.66%, #ff0000 66.66%);
+            color: white;
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            border: 5px solid black; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+        }
+
+        header h1,
+        header p {
+            background: rgba(255, 255, 255, 0.8); 
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+            margin: 10px 0; 
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+            color: black;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: black;
+        }
+
+        section {
+            margin: 50px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #282c34;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .large-image-gallery {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Larger columns for larger images */
+        }
+
+        .image-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .image-gallery figcaption {
+            text-align: center;
+            font-style: italic;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .image-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Images of the Russian Empire: <br>
+        Colorizing the Prokudin-Gorskii Photo Collection</h1>
+    <p>By Ajay Bhargava</p>
+</header>
+
+
+<section class="background-section">
+    <h2>The Prokudin-Gorskii Collection</h2>
+    <p>
+        Sergei Prokudin-Gorskii was a Russian photographer who took a series of photographs across the Russian Empire in the early 1910s. Using a unique three-color technique, he took images with blue, green, and red filters, 
+        allowing future reconstruction of his images.  <br><br> Provided below are a self-portrait of Prokudin-Gorskii, an example of one of his images (taken with a blue filter), and an example colorized output. The following sections will 
+        demonstrate the process of aligning and colorizing the historic photographs.</p>
+    <div class="image-gallery">
+        <figure>
+            <img src="media/SPG.jpg" alt="Sergei Prokudin-Gorskii">
+            <figcaption>Sergei Prokudin-Gorskii</figcaption>
+        </figure>
+        <figure>
+            <img src="media/input.jpg" alt="Three-Channel Input Picture">
+            <figcaption>Unedited Image</figcaption>
+        </figure>
+        <figure>
+            <img src="media/harvesters.jpg" alt="Colorized Output">
+            <figcaption>Colorized Output</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section>
+    <h2>Section One: Low Resolution Images</h2>
+    <p>
+        I aligned the following image using a brute-force method. A window of possible shifts was tested, each shift being compared to the others with their <a href="https://en.wikipedia.org/wiki/Structural_similarity_index_measure">structural similarity index</a>.
+        The red and green channel were each aligned to the blue channel independently, and these results were combined to produce the colorized images below.
+        </p>
+    
+    <div class="image-gallery">
+        <figure>
+            <img src="media/tobolsk.jpg">
+            <figcaption>Tobolsk</figcaption>
+            <figcaption>Red Shift: (6, 3) </figcaption>
+            <figcaption>Green Shift: (3, 2) </figcaption>
+        </figure>
+        <figure>
+            <img src="media/cathedral.jpg">
+            <figcaption>Cathedral</figcaption>
+            <figcaption>Red Shift: (12, 3)</figcaption>
+            <figcaption>Green Shift: (5, 2)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/monastery.jpg">
+            <figcaption>Monastery</figcaption>
+            <figcaption>Red Shift: (3, 2) </figcaption>
+            <figcaption>Green Shift: (-3, 2) </figcaption>
+        </figure>
+    </div>
+</section>
+
+<section>
+    <h2>Section Two: High Resolution Images</h2>
+    <p>The following images in .tif format are too large for an exhaustive search. Due to this, I created an image pyramid scheme to efficiently perform alignment by progressively refining the search at multiple scales. 
+        Beginning with low-resolution approximations of the images, I applied an increasingly refined search window as the images got larger and more computationally expensive.
+    </p>
+    
+    <div class="image-gallery large-image-gallery">
+        <figure>
+            <img src="media/harvesters.jpg">
+            <figcaption>Harvesters</figcaption>
+            <figcaption>Red Shift: (158, 17)</figcaption>
+            <figcaption>Green Shift: (84, 22)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/sculpture.jpg" >
+            <figcaption>Sculpture</figcaption>
+            <figcaption>Red Shift: (158, -36)</figcaption>
+            <figcaption>Green Shift: (48, -15)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/onion_church.jpg" >
+            <figcaption>Onion Church</figcaption>
+            <figcaption>Red Shift: (159, 59)</figcaption>
+            <figcaption>Green Shift: (76, 41)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/icon.jpg">
+            <figcaption>Icon</figcaption>
+            <figcaption>Red Shift: (122, 34)</figcaption>
+            <figcaption>Green Shift: (59, 23)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/self_portrait.jpg">
+            <figcaption>Self Portrait</figcaption>
+            <figcaption>Red Shift: (222, 72)</figcaption>
+            <figcaption>Green Shift: (116, 48)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/church.jpg">
+            <figcaption>Church</figcaption>
+            <figcaption>Red Shift: (84, -5)</figcaption>
+            <figcaption>Green Shift: (37, 4)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/three_generations.jpg">
+            <figcaption>Three Generations</figcaption>
+            <figcaption>Red Shift: (164, 17)</figcaption>
+            <figcaption>Green Shift: (69, 20)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/train.jpg">
+            <figcaption>Train</figcaption>
+            <figcaption>Red Shift: (126, 45)</figcaption>
+            <figcaption>Green Shift: (58, 8)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/melons.jpg" >
+            <figcaption>Melons</figcaption>
+            <figcaption>Red Shift: (237, 20)</figcaption>
+            <figcaption>Green Shift: (120, 10)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/emir.jpg">
+            <figcaption>Emir</figcaption>
+            <figcaption>Red Shift: (162, 81)</figcaption>
+            <figcaption>Green Shift: (69, 33)</figcaption>
+        </figure>
+        <figure>
+            <img src="media/lady.jpg">
+            <figcaption>Lady</figcaption>
+            <figcaption>Red Shift: (162, 17)</figcaption>
+            <figcaption>Green Shift: (77, 9)</figcaption>
+        </figure>
+    </div>
+</section>
+
+</body>
+</html>
