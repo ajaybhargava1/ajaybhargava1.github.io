@@ -108,9 +108,9 @@
 
 
 <section class="background-section">
-    <h2>The Prokudin-Gorskii Collection</h2>
+    <h2>Background: The Prokudin-Gorskii Collection</h2>
     <p>
-        Sergei Prokudin-Gorskii was a Russian photographer who took a series of photographs across the Russian Empire in the early 1910s. Using a unique three-color technique, he took images with blue, green, and red filters, 
+        Sergei Prokudin-Gorskii was a Russian photographer who took a series of photographs across the Russian Empire in the early 1910s – prior to the existence of color photography. Using a unique three-color technique, he took images with blue, green, and red filters, 
         allowing future reconstruction of his images.  <br><br> Provided below are a self-portrait of Prokudin-Gorskii, an example of one of his images (taken with a blue filter), and an example colorized output. The following sections will 
         demonstrate the process of aligning and colorizing the historic photographs.</p>
     <div class="image-gallery">
@@ -120,11 +120,11 @@
         </figure>
         <figure>
             <img src="media/input.jpg" alt="Three-Channel Input Picture">
-            <figcaption>Unedited Image</figcaption>
+            <figcaption>Sample Unedited Image</figcaption>
         </figure>
         <figure>
             <img src="media/harvesters.jpg" alt="Colorized Output">
-            <figcaption>Colorized Output</figcaption>
+            <figcaption>Sample Colorized Output</figcaption>
         </figure>
     </div>
 </section>
@@ -132,8 +132,7 @@
 <section>
     <h2>Section One: Low Resolution Images</h2>
     <p>
-        I aligned the following image using a brute-force method. A window of possible shifts was tested, each shift being compared to the others with their <a href="https://en.wikipedia.org/wiki/Structural_similarity_index_measure">structural similarity index</a>.
-        The red and green channel were each aligned to the blue channel independently, and these results were combined to produce the colorized images below.
+        I aligned the following low resolution images using a brute-force method. A window of possible shifts was tested, each shift being compared to the others with their <a href="https://en.wikipedia.org/wiki/Structural_similarity_index_measure">structural similarity index (SSIM)</a>. The red and green channel were each aligned to the blue channel independently, and these results were combined to produce the colorized images below. I attempted to use simple Euclidean distance as the loss metric for determining the best shift, and it yielded similar results to the SSIM, though these images and the final implementation used SSIM for consistency with the following section. 
         </p>
     
     <div class="image-gallery">
@@ -160,8 +159,17 @@
 
 <section>
     <h2>Section Two: High Resolution Images</h2>
-    <p>The following images in .tif format are too large for an exhaustive search. Due to this, I created an image pyramid scheme to efficiently perform alignment by progressively refining the search at multiple scales. 
-        Beginning with low-resolution approximations of the images, I applied an increasingly refined search window as the images got larger and more computationally expensive.
+    <p>The following images in .tif format are too large for an exhaustive search. Due to this, I created an 
+        image pyramid scheme to efficiently perform alignment by 
+        progressively refining the search at multiple scales. <br><br>
+        Beginning with low-resolution approximations of the images, I applied an increasingly refined search window as the images got larger 
+        and more computationally expensive. I adjusted the parameters, namely the number of 
+        levels in the image pyramid as well as the search range, to scan over until 
+        the results outputted the most accurate colorizations. These images use a 4 layer pyramid searching at a 25x25 range on the smallest image, 
+        with the range diminishing as the images got larger. The image is also cropped before calculating the SSIM score for the offset, in order to avoid the rolled edges from affecting calculation. 
+        
+        <br><br>With this setup, some images appear better colorized than others. 
+        For instance, the Emir image's channels are slightly offset – the algorithm performs worse due to the image's channels having different brightness values.
     </p>
     
     <div class="image-gallery large-image-gallery">
