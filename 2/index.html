@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Processing Techniques</title>
+  
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto&display=swap">
+  
+  <style>
+    /* General page styling */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* Sidebar navigation styling */
+    .sidebar {
+      width: 220px;
+      background-color: #2b2d42;
+      padding-top: 30px;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 15px;
+      text-decoration: none;
+      border-radius: 10px;
+      margin: 15px 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+    }
+
+    .sidebar a:hover {
+      background-color: #8d99ae;
+      transform: scale(1.05);
+    }
+
+    .sidebar a.active {
+      background-color: #edf2f4;
+      color: #2b2d42;
+      font-weight: bold;
+    }
+
+    /* Content area styling */
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      color: #edf2f4;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #8d99ae;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #edf2f4;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Title and byline styling */
+    .header {
+      background-color: #2b2d42;
+      color: #edf2f4;
+      text-align: center;
+      padding: 40px 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 48px;
+    }
+
+    .header p {
+      font-size: 22px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Section styling */
+    section {
+      background-color: #fff;
+      padding: 40px 30px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    section:hover {
+      transform: scale(1.01);
+    }
+
+    /* Add spacing between title box and first section */
+    .content section:first-of-type {
+      margin-top: 30px;
+    }
+
+    /* Highlight active section in the table of contents */
+    .active-section {
+      font-weight: bold;
+      color: #2b2d42;
+    }
+
+    /* Smooth scrolling for section links */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Footer for extra styling */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Table of Contents -->
+  <div class="sidebar">
+    <a href="#filters" id="toc-filters">Filters</a>
+    <a href="#sharpening" id="toc-sharpening">Sharpening</a>
+    <a href="#hybrid" id="toc-hybrid">Hybrid Images</a>
+    <a href="#blending" id="toc-blending">Multiresolution Blending</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header with Title and Byline -->
+    <div class="header">
+      <h1>Filters and Frequencies</h1>
+      <h3>By Ajay Bhargava</h3>
+    </div>
+
+<!-- Section for Filters and Sharpening -->
+<section id="filters">
+    <h2>Filters</h2>
+    <p>This section demonstrates edge detection using filters. The first set of images below demonstrate a basic finite filter using the difference operators [1 - 1] and its transpose. Combining these values by taking the root of the sum of squared pixel values yields the gradient image. This image was then binarized using a threshold of 0.25, yielding the final edge-detected image below.</p>
+    
+    <!-- Flex container for images and captions -->
+    <div style="display: flex; gap: 1px; justify-content: space-between;">
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.1/cameraman.jpg" alt="Original Cameraman" style="width: 200px;">
+          <figcaption>Original Cameraman</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.1/outX.jpg" alt="Filtered X" style="width: 200px;">
+          <figcaption>Filtered X</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.1/outY.jpg" alt="Filtered Y" style="width: 200px;">
+          <figcaption>Filtered Y</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.1/g.jpg" alt="Gradient" style="width: 200px;">
+          <figcaption>Gradient</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.1/t0.25.jpg" alt="Threshold 0.25" style="width: 200px;">
+          <figcaption>Threshold 0.25</figcaption>
+        </figure>
+      </div>
+
+    <p>In order to improve the edge detection quality, a derivative of gaussian filter was used. The image was blurred using the Gaussian filter prior to running the finite difference filters on it, diminishing the amount of noise in the final output. A threshold value of 0.09 was used to binarize the image. This yielded the output below. <br> <br> As a method to authenticate the result, a single filter was created by convolving the Gaussian filter with the finite difference filters. The image convolved with this filter would be expected to yield the same results as the method above – and it did. <br><br> The main difference with using the gaussian filter is the lack of noise in the output result. The edges detected are more defined, and the background of the image has less false detections. Using the blurred image as the input also changed the ideal threshold value to be significantly lower.  </p>
+    
+    <div style="display: flex; gap: 1px; justify-content: space-between;">
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.2/blurred.jpg" alt="Blurred Cameraman" style="width: 200px;">
+          <figcaption>Blurred Cameraman</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.2/outX.jpg" alt="Filtered X" style="width: 200px;">
+          <figcaption>Filtered X</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.2/outY.jpg" alt="Filtered Y" style="width: 200px;">
+          <figcaption>Filtered Y</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.2/g.jpg" alt="Gradient" style="width: 200px;">
+          <figcaption>Gradient</figcaption>
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/1.2/t0.09.jpg" alt="Threshold 0.25" style="width: 200px;">
+          <figcaption>Threshold 0.09</figcaption>
+        </figure>
+      </div>
+
+</section>
+
+  
+  
+    <!-- Section 2 -->
+    <section id="sharpening">
+        <h2>Sharpening</h2>
+        <p>Using a similar Gaussian filter as described in the sections above, I extracted the low and high frequencies of an image in order to perform sharpening. By adding the high frequencies of the image, multiplied by some value alpha, to the original, it achieves a sharpening effect. This is demonstrated on two sample images below.
+        </p>
+
+        <div style="display: flex; gap: 1px; justify-content: space-between;">
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/alpha0.png" alt="Taj0" style="width: 200px;">
+              <figcaption>Original Taj Mahal</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/alpha4.png" alt="Taj1" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 4</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/alpha8.png" alt="Taj2" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 8</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/alpha12.png" alt="Taj3" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 12</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/alpha1000.png" alt="Taj4" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 1000</figcaption>
+            </figure>
+          </div>
+
+          <div style="display: flex; gap: 1px; justify-content: space-between;">
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/indiana.jpg" alt="i0" style="width: 200px;">
+              <figcaption>Original Indy</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/i4.png" alt="i4" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 4</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/i8.png" alt="i8" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 8</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/i12.png" alt="i12" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 12</figcaption>
+            </figure>
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/i1000.png" alt="i1000" style="width: 200px;">
+              <figcaption>Sharpened, alpha = 1000</figcaption>
+            </figure>
+          </div>
+          <p>A similar process was followed in order to blur an image, and then attemp to resharpen it to its original. The image was blurred with a Gaussian filter, then this resulting image had its high frequencies added to itself. The reconstructed image is displayed below.</p>
+
+          <div style="display: flex; gap: 1px; justify-content: space-between;">
+            <figure style="flex: 1; text-align: center;">
+              <img src="media/2.1/resharpen.png" alt="i0" style="width: 200px;">
+              <figcaption>Reconstructed Taj Mahal</figcaption>
+            </figure>
+    
+          </div>
+        </section>
+
+
+        <section id="hybrid">
+            <h2>Hybrid Images</h2>
+            <p>Using the extracted high and low frequencies as described above, I create 'hybrid images'. These are images that when looked at from a distance shows a different image than when looked at closely. This is due to the fact that the high frequencies are more visible from a shorter distance, while the lower frequencies are more visible from a further distance.</p>
+            
+            <div style="display: flex; gap: 1px; justify-content: center; align-items: center;">
+              <!-- First image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/DerekPicture.jpg" alt="Derek" style="width: 200px;">
+                <figcaption>Derek</figcaption>
+              </figure>
+          
+              <!-- Plus sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+          
+              <!-- Second image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/nutmeg.jpg" alt="Nutmeg" style="width: 200px;">
+                <figcaption>Nutmeg</figcaption>
+              </figure>
+          
+              <!-- Equals sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">=</div>
+          
+              <!-- Combined image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/combined.jpg" alt="Combined" style="width: 200px;">
+                <figcaption>Combined Image</figcaption>
+              </figure>
+            </div>
+
+            <div style="display: flex; gap: 1px; justify-content: center; align-items: center;">
+                <!-- First image -->
+                <figure style="flex: 1; text-align: center;">
+                  <img src="media/2.2/darren.jpg" alt="Derek" style="width: 200px;">
+                  <figcaption>Darren</figcaption>
+                </figure>
+            
+                <!-- Plus sign -->
+                <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+            
+                <!-- Second image -->
+                <figure style="flex: 1; text-align: center;">
+                  <img src="media/2.2/vibhav.jpg" alt="Nutmeg" style="width: 200px;">
+                  <figcaption>Vibhav</figcaption>
+                </figure>
+            
+                <!-- Equals sign -->
+                <div style="font-size: 36px; font-weight: bold; color: #333;">=</div>
+            
+                <!-- Combined image -->
+                <figure style="flex: 1; text-align: center;">
+                  <img src="media/2.2/c.jpg" alt="Combined" style="width: 200px;">
+                  <figcaption>Combined Image</figcaption>
+                </figure>
+              </div>
+
+              <div style="display: flex; gap: 1px; justify-content: center; align-items: center;">
+                <!-- First image -->
+                <figure style="flex: 1; text-align: center;">
+                  <img src="media/2.2/oldgate.jpg" alt="Derek" style="width: 200px;">
+                  <figcaption>Sather Gate, 1910</figcaption>
+                </figure>
+            
+                <!-- Plus sign -->
+                <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+            
+                <!-- Second image -->
+                <figure style="flex: 1; text-align: center;">
+                  <img src="media/2.2/newgate.jpg" alt="Nutmeg" style="width: 200px;">
+                  <figcaption>Sather Gate, 2024</figcaption>
+                </figure>
+            
+                <!-- Equals sign -->
+                <div style="font-size: 36px; font-weight: bold; color: #333;">=</div>
+            
+                <!-- Combined image -->
+                <figure style="flex: 1; text-align: center;">
+                  <img src="media/2.2/c2.jpg" alt="Combined" style="width: 200px;">
+                  <figcaption>Combined Image</figcaption>
+                </figure>
+              </div>
+            <p>The first two hybrid images appear to work better than the final one. I would suppose this is due to the fact that all of the landmarks of the gate are not perfectly aligned, which causes some issues when perceiving the image. It may not work with trying to layer the same image on top of itself (i.e. the gate is essentially the same in both images, just with different backgrounds).</p>
+            <p>We can also view this process in the lens of frequency analysis. For the Derek & Nutmeg example, the Fourier transforms of the original images, the filtered images, and the hybrid image are shown below.</p>
+          
+
+            <div style="display: flex; gap: 1px; justify-content: space-between;">
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/DerekFourier.jpg" alt="i0" style="width: 200px;">
+                <figcaption>Derek</figcaption>
+              </figure>
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/NutmegFourier.jpg" alt="i4" style="width: 200px;">
+                <figcaption>Nutmeg</figcaption>
+              </figure>
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/LowPassFourier.jpg" alt="i8" style="width: 200px;">
+                <figcaption>Filtered Derek</figcaption>
+              </figure>
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/HighPassFourier.jpg" alt="i12" style="width: 200px;">
+                <figcaption>Filtered Nutmeg</figcaption>
+              </figure>
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/2.2/HybridFourier.jpg" alt="i1000" style="width: 200px;">
+                <figcaption>Hybrid Image</figcaption>
+              </figure>
+            </div>
+
+
+          </section>
+          
+
+    <!-- Section 3 -->
+    <section id="blending">
+      <h2>Multiresolution Blending Through Gaussian & Laplacian Stacks</h2>
+
+        <p>The following section focuses on combining images using a Gaussian and Lapalcaian stack. A Gaussian stack is a series of the same image, continuously blurred at increasing levels with a Gaussian filter. A Laplacian stack is the differences between the images in the Gaussian stack, appended with the final image in the Gaussian stack at the end. Summing up the images in a Laplacian stack yields the original image at the beginning. <br><br> This technique can be used to combine images in a smooth manner. By combining the Laplacian stacks of two images along with the Gaussian stack of a black and white mask, the images can be summed up to create a smooth blend, as demonstrated below. </p>
+      <!-- Add image tags for the third section (e.g., blending technique images) -->
+      <div style="display: flex; gap: 1px; justify-content: center; align-items: center;">
+        <!-- First image -->
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple.jpeg" alt="Apple" style="width: 200px;">
+          <figcaption>Apple</figcaption>
+        </figure>
+    
+        <!-- Plus sign -->
+        <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+    
+        <!-- Second image -->
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orange.jpeg" alt="Orange" style="width: 200px;">
+          <figcaption>Orange</figcaption>
+        </figure>
+        
+        <!-- Plus sign -->
+        <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+    
+        <!-- Second image -->
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/mask.jpg" alt="Mask" style="width: 200px;">
+          <figcaption>Mask</figcaption>
+        </figure>
+    
+        <!-- Equals sign -->
+        <div style="font-size: 36px; font-weight: bold; color: #333;">=</div>
+    
+        <!-- Combined image -->
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/oraple.jpg" alt="Combined" style="width: 200px;">
+          <figcaption>Oraple</figcaption>
+        </figure>
+      </div>
+      <p>Below are the Gaussian and Laplacian stacks for the apple and orange, respectively. The entire stack is not shown for brevity.</p>
+
+
+      <div style="display: flex; gap: 1px; justify-content: space-between;">
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple1.jpg" alt="Taj0" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple4.jpg" alt="Taj1" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple12.jpg" alt="Taj2" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple21.jpg" alt="Taj3" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple29.jpg" alt="Taj4" style="width: 100px;">
+        </figure>
+      </div>
+
+      <div style="display: flex; gap: 1px; justify-content: space-between;">
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple_laplacian1.jpg" alt="Taj0" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple_laplacian4.jpg" alt="Taj1" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple_laplacian12.jpg" alt="Taj2" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple_laplacian21.jpg" alt="Taj3" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/apple_laplacian21.jpg" alt="Taj4" style="width: 100px;">
+        </figure>
+      </div>
+
+      <div style="display: flex; gap: 1px; justify-content: space-between;">
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orangee1.jpg" alt="Taj0" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orangee4.jpg" alt="Taj1" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orangee12.jpg" alt="Taj2" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orangee21.jpg" alt="Taj3" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orangee29.jpg" alt="Taj4" style="width: 100px;">
+        </figure>
+      </div>
+
+      <div style="display: flex; gap: 1px; justify-content: space-between;">
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orange_laplacian1.jpg" alt="Taj0" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orange_laplacian4.jpg" alt="Taj1" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orange_laplacian12.jpg" alt="Taj2" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orange_laplacian21.jpg" alt="Taj3" style="width: 100px;">
+        </figure>
+        <figure style="flex: 1; text-align: center;">
+          <img src="media/2.3/orange_laplacian28.jpg" alt="Taj4" style="width: 100px;">
+        </figure>
+      </div>
+
+      
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      © 2024 Ajay Bhargava - Image Processing Techniques
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript for highlighting the active section in the sidebar
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const links = document.querySelectorAll('.sidebar a');
+
+      let currentSection = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === currentSection) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
