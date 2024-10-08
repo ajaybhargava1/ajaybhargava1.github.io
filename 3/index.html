@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Morphing Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #2a4d69;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sidebar h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5em;
+            color: #f4f7f6;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            font-size: 1.1em;
+            color: #cfe0e8;
+            margin-bottom: 15px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #ffcc5c;
+        }
+
+        /* Page Content */
+        .container {
+            margin-left: 240px;
+            padding: 30px;
+            width: calc(100% - 240px);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            color: #2a4d69;
+            margin-bottom: 10px;
+        }
+
+        .byline {
+            font-size: 1.2em;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #4b86b4;
+        }
+
+        .section p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .images {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .image-card {
+            flex: 1;
+            background: #f4f7f6;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .image-card img {
+            width: 38%;
+            border-radius: 10px;
+        }
+
+        
+
+        .image-card p {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Sidebar Active Section Highlight */
+        .sidebar a.active {
+            color: #ffcc5c;
+            font-weight: bold;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eaeaea;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #4b86b4;
+            border-radius: 20px;
+            border: 3px solid #eaeaea;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h2>Sections</h2>
+        <a href="#keypoints" id="link-keypoints">Facial Keypoints</a>
+        <a href="#midway" id="link-midway">Midway Face</a>
+        <a href="#morph" id="link-morph">Morph Sequence</a>
+        <a href="#meanface" id="link-meanface">Mean Face</a>
+        <a href="#caricature" id="link-caricature">Caricature</a>
+    </div>
+
+    <!-- Page Content -->
+    <div class="container">
+        <h1>Facial Morphing Project</h1>
+        <div class="byline">by Ajay Bhargava</div>
+
+        <!-- Keypoints and Triangulation Section -->
+        <div class="section" id="keypoints">
+            <h2>Facial Keypoints and Triangulation</h2>
+            <p>To begin morphing the faces together, I first found two photos and labeled them with corresponding points on each. From this, I took a Delauney triangulation of the points on each image.</p>
+            <div class="images">
+                <div class="image-card">
+                    <img src="media/barack.png" alt="Portrait 1">
+                    <p>Barack Obama</p>
+                    <img src="media/barackT.png" alt="Portrait 1">
+                    <p>Triangle Barack Obama</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/george.jpg" alt="Portrait 2">
+                    <p>George Clooney</p>
+                    <img src="media/georgeT.png" alt="Portrait 2">
+                    <p>Triangle George Clooney</p>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <!-- Midway Face Section -->
+        <div class="section" id="midway">
+            <h2>Midway Face</h2>
+            <p>Warping the faces into the average triangles of the two, I was able to average the pixels and portray a midway face. Some examples are shown below.</p>
+            <div class="images">
+                <div class="image-card">
+                    <img src="media/ajay.png" alt="Original Image 1">
+                    <p>Ajay</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/AG.png" alt="Midway Face">
+                    <p>Ajay Clooney? George Bhargava?</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/george.jpg" alt="Original Image 2">
+                    <p>George</p>
+                </div>
+            </div>
+            <!-- Extra examples below -->
+            <div class="images" style="margin-top: 30px;">
+                <div class="image-card">
+                    <img src="media/barack.png" alt="Example Image 1">
+                    <p>Barack</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/mid.png" alt="Example Image 2">
+                    <p>Barack Clooney? George Obama?</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/george.jpg" alt="Example Image 3">
+                    <p>George</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="morph">
+            <h2>Morph</h2>
+            <p>A gif morph of two faces can be created by using a similar method to the midway face above. By averaging the points of the triangles using some weighted fraction, then using the same fraction on the pixels values of the warped images, an intermediate image can be created. Putting these images together yields the result below.</p>
+            <div class="images">
+                <div class="image-card">
+                    <img src="media/wow.gif" alt="Original Image 1">
+                    <p>Clooney to Obama</p>
+                </div>
+               
+            </div>
+           
+        </div>
+
+        <div class="section" id="meanface">
+            <h2>Mean Face</h2>
+            <p>Using the method to find midway faces can be applied on more than just 2 faces. Using images of Brazilians taken in 2005/2006 at the Artificial Intelligence Laboratory of FEI in São Bernardo do Campo, São Paulo, Brazil, I was able to generate the average face of a population, as demonstrated below.</p>
+            <div class="images">
+                <div class="image-card">
+                    <img src="media/20a.jpg" alt="Neutral Image 1">
+                    <p>Neutral Image</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/21a.jpg" alt="Midway Face">
+                    <p>Neutral Image</p>
+                </div>
+                <div class="image-card">
+                    <img src=" media/22a.jpg" alt="Neutral Image 2">
+                    <p>Neutral Image</p>
+                </div>
+            </div>
+            <!-- Extra examples below -->
+            <div class="images" style="margin-top: 30px;">
+                <div class="image-card">
+                    <img src="media/27a.jpg" alt="Neutral Image 3">
+                    <p>Neutral Image</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/neutral_avg.png" alt="Average Neutral Face Image ">
+                    <p>Average Neutral Face</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/28a.jpg" alt="Neutral Image 5">
+                    <p>Neutral Image</p>
+                </div>
+            </div>
+            <div class="images" style="margin-top: 30px;">
+                <div class="image-card">
+                    <img src="media/30a.jpg" alt="Neutral Image 6">
+                    <p>Neutral Image</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/40a.jpg" alt="Neutral Image 7">
+                    <p>Neutral Image</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/54a.jpg" alt="Neutral Image83">
+                    <p>Neutral Image</p>
+                </div>
+            </div>
+            <p><br>A similar average was found on the same dataset of faces, this time when they are smiling. I then warped that face into my face's geometry, then warped my face into that face's geometry,</p>
+
+            <div class="images" style="margin-top: 30px;">
+                <div class="image-card">
+                    <img src="media/face_warped_to_ajay.png" alt="Neutral Image 6">
+                    <p>Average Smile Warped to Ajay Image</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/ajay_warped_avg.png" alt="Neutral Image 7">
+                    <p>Ajay Warped to Average Smile</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="caricature">
+            <h2>Caricature Face</h2>
+            <p>Using the same keypoints method as described above, we can create caricatures of faces by multiplying the difference of points by some factor. Some exaggerated examples of this are shown below.</p>
+            <div class="images">
+                <div class="image-card">
+                    <img src="media/zionC.png" alt="Original Image 1">
+                    <p>Zion Caricature</p>
+                </div>
+                <div class="image-card">
+                    <img src="media/ajay_caricature.png" alt="Midway Face">
+                    <p>Ajay Caricature</p>
+                </div>
+            </div>
+        
+        </div>
+
+        <div class="section" id="caricature">
+            <h2>Presidential Morph</h2>
+            <p>I finished this project by creating a video of the most recent presidents morphed together.</p>
+            <iframe width="1000" height="600" src="https://youtube.com/embed/i7WyOo0Vq5M" 
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        
+
+
+        <!-- Other sections (Morph Sequence, Mean Face, Caricature) remain unchanged -->
+    </div>
+
+    <script>
+        // Highlight active section link
+        window.addEventListener('scroll', function () {
+            let sections = document.querySelectorAll('.section');
+            let links = document.querySelectorAll('.sidebar a');
+
+            sections.forEach((section, index) => {
+                let rect = section.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                    links.forEach(link => link.classList.remove('active'));
+                    links[index].classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
