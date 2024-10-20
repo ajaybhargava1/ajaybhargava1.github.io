@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Processing Techniques</title>
+  
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto&display=swap">
+  
+  <style>
+    /* General page styling */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* Sidebar navigation styling */
+    .sidebar {
+      width: 220px;
+      background-color: #2b8069;
+      padding-top: 30px;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 15px;
+      text-decoration: none;
+      border-radius: 10px;
+      margin: 15px 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+    }
+
+    .sidebar a:hover {
+      background-color: #8d99ae;
+      transform: scale(1.05);
+    }
+
+    .sidebar a.active {
+      background-color: #edf2f4;
+      color: #2b2d42;
+      font-weight: bold;
+    }
+
+    /* Content area styling */
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      color: #edf2f4;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #8d99ae;
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #edf2f4;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Image container styling */
+    figure {
+      display: inline-block;
+      width: 30%;
+      margin: 0 1.33% 20px; /* Adds spacing between images */
+      text-align: center;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    figcaption {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* Title and byline styling */
+    .header {
+      background-color: #2b8069;
+      color: #edf2f4;
+      text-align: center;
+      padding: 40px 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 48px;
+    }
+
+    .header p {
+      font-size: 22px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Section styling */
+    section {
+      background-color: #fff;
+      padding: 40px 30px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    section:hover {
+      transform: scale(1.01);
+    }
+
+    /* Add spacing between title box and first section */
+    .content section:first-of-type {
+      margin-top: 30px;
+    }
+
+    /* Highlight active section in the table of contents */
+    .active-section {
+      font-weight: bold;
+      color: #2b2d42;
+    }
+
+    /* Smooth scrolling for section links */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Footer for extra styling */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Table of Contents -->
+  <div class="sidebar">
+    <a href="#filters" id="toc-filters">Image Warping</a>
+    <a href="#hybrid" id="toc-hybrid">Image Rectification</a>
+    <a href="#blending" id="toc-blending">Image Mosaics</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header with Title and Byline -->
+    <div class="header">
+      <h1>Image Rectification & Mosaics</h1>
+      <h3>By Ajay Bhargava</h3>
+    </div>
+
+    <!-- Section 1 -->
+    <section id="filters">
+      <h2>Image Warping</h2>
+      <p>I began this project by shooting sets of images, taken with the same center of projection, but with different angles. These sets of images are shown in this section, as well as the Image Mosaics section, next to their outputs.</p>
+      <p>To begin warping one image into the perspective of another, I first compute the homography matrix between the two. This gives us a matrix where, when multiplied by a point in one image, it gives us the corresponding point in the other image. Next, I applied this H matrix on all points in one of the images to output it in the perspective of the second image.</p>
+      <!-- Image and caption -->
+      <figure>
+        <img src="media/TV.png" alt="Warped Image 1">
+        <figcaption>TV Image before warping</figcaption>
+      </figure>
+      <figure>
+        <img src="media/TV2.png" alt="Warped Image 2">
+        <figcaption>Second TV Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/warped_TV.png" alt="Warped Image 3">
+        <figcaption>TV after warping</figcaption>
+      </figure>
+
+      <figure>
+        <img src="media/snackpass2.png" alt="Warped Image 1">
+        <figcaption>Kitchen Snackpass Flag before warping</figcaption>
+      </figure>
+      <figure>
+        <img src="media/snackpass.png" alt="Warped Image 2">
+        <figcaption>Second Kitchen Snackpass Flag</figcaption>
+      </figure>
+      <figure>
+        <img src="media/warped_snackpass.png" alt="Warped Image 3">
+        <figcaption>Flag after warping</figcaption>
+      </figure>
+    </section>
+
+    <!-- Section 2 -->
+    <section id="hybrid">
+      <h2>Image Rectification</h2>
+      <p>This similar process can be applied to 'rectify' an image. Some examples are below.</p>
+      <!-- Image and caption -->
+      <figure>
+        <img src="media/MET.png" alt="Warped Image 1">
+        <figcaption>The Met</figcaption>
+      </figure>
+      <figure>
+        <img src="media/flower.png" alt="Warped Image 2">
+        <figcaption>Irises - Van Gogh</figcaption>
+      </figure>
+      <br>
+      <figure>
+        <img src="media/poster.png" alt="Warped Image 1">
+        <figcaption>Way West Evacuation</figcaption>
+      </figure>
+      <figure>
+        <img src="media/test2.png" alt="Warped Image 2">
+        <figcaption>DO NOT USE ELEVATORS</figcaption>
+      </figure>
+    </section>
+
+    <!-- Section 3 -->
+    <section id="blending">
+      <h2>Image Mosaics</h2>
+      <p>This technique can also be used to create a 'mosaic'. Simply warp one image into the perspective of another, then align them and display. Examples of this are demonstrated below. The slight differences in color are mitigated using a Laplacian Stack, which I implemented at the link <a href="https://ajaybhargava1.github.io/2/index.html">here.<br></a></p>
+      <!-- Image and caption -->
+
+      <figure>
+        <img src="media/17.png" alt="Blending example 3">
+        <figcaption>BWW Sign</figcaption>
+      </figure>
+      <figure>
+        <img src="media/18.png" alt="Blending example 1">
+        <figcaption>BWW Sign, Diff Angle</figcaption>
+      </figure>
+      <figure>
+        <img src="media/combine.jpg" alt="Blending example 2">
+        <figcaption>Mosaic Together</figcaption>
+      </figure>
+      <figure>
+        <img src="media/booth.jpg" alt="Blending example 1">
+        <figcaption>BWW Booth</figcaption>
+      </figure>
+      <figure>
+        <img src="media/booth2.jpg" alt="Blending example 2">
+        <figcaption>Same Booth, Diff Angle</figcaption>
+      </figure>
+      <figure>
+        <img src="media/boothM.jpg" alt="Blending example 3">
+        <figcaption>Mosaic Together</figcaption>
+      </figure>
+      <br>
+      <p>The following is an example of a failed mosaic. First, it doesn't use Laplacian smoothing, so the borders look choppy and are not smooth. The bigest issue however, was not keeping the center of projection this same. This meant objects would not perfectly align, which is clear through the water bottle which was very close to the lens of the camera. </p>
+      <figure>
+        <img src="media/BWW2.png" alt="Blending example 1">
+        <figcaption>BWW</figcaption>
+      </figure>
+      <figure>
+        <img src="media/BWW.png" alt="Blending example 2">
+        <figcaption>BWW, with Vishal</figcaption>
+      </figure>
+      <figure>
+        <img src="media/mosaicOut689.jpg" alt="Blending example 3">
+        <figcaption>Not the Best Mosaic</figcaption>
+      </figure>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      © 2024 Ajay Bhargava - Image Processing Techniques
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript for highlighting the active section in the sidebar
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const links = document.querySelectorAll('.sidebar a');
+
+      let currentSection = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === currentSection) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
