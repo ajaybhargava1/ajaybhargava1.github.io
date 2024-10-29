@@ -174,6 +174,15 @@
     <a href="#filters" id="toc-filters">Image Warping</a>
     <a href="#hybrid" id="toc-hybrid">Image Rectification</a>
     <a href="#blending" id="toc-blending">Image Mosaics</a>
+    <a href="#4b1" id="toc-4b1">Automatic Feature Detection</a>
+    <a href="#anms" id="toc-anms">Adaptive Non-Maximal Suppression</a>
+    <a href="#fsd" id="toc-fd">Feature Descriptors</a>
+    <a href="#ransac" id="toc-fd">Feature Matching, RANSAC, and Mosaics</a>
+    <a href="#take" id="toc-fd">Takeaways</a>
+
+
+
+    
   </div>
 
   <!-- Main Content -->
@@ -286,6 +295,115 @@
         <figcaption>Not the Best Mosaic</figcaption>
       </figure>
     </section>
+
+    <section id="4b1">
+      <h2>Automatic Feature Detection</h2>
+      <p> The creation of mosaics as shown above requires manual point annotations. The rest of this page will desrcibe a procedure to automatically detect similar features on both images and create the mosaic accordingly. It is based on the paper “Multi-Image Matching using Multi-Scale Oriented Patches” by Brown et al. </p>
+      <p><br> The first step in doing so is detecting Harris interest points. The image below demonstrates all of the interest points plotted on one of the mosaic images.</p>
+      <figure>
+        <img src="media/manyHarrisPoints.jpg" alt="Blending example 3">
+        <figcaption>Harris Points</figcaption>
+      </figure>
+      <p>That's way too many points. We can set a threshold to filter out only the most prominent of these points.</p>
+
+      <figure>
+        <img src="media/0.2t.jpg" alt="Blending example 3">
+        <figcaption>Harris Points with threshold of 20%</figcaption>
+      </figure>
+
+      <figure>
+        <img src="media/0.5t.jpg" alt="Blending example 3">
+        <figcaption>Harris Points with threshold of 50%</figcaption>
+      </figure>
+
+
+    </section>
+
+    <section id = "anms">
+      <h2>Adaptive Non-Maximal Suppression</h2>
+      <p>The points selected, in many cases, are very similar points that are closer together. To properly estimate the homography, it is desirable to have points spread out across the image, though still remaining important Harris points. I implemented the Adaptive Non-Maximal Suppression technique from Brown et al. An example result of the ANMS technique is shown below.</p>
+      <figure>
+        <img src="media/anms.jpg" alt="Blending example 3">
+        <figcaption>ANMS Points</figcaption>
+      </figure>
+    </section>
+
+    <section id = "fd">
+      <h2>Feature Descriptors</h2>
+      <p>In order to find ways to match the points from one image to another, I implemented feature descriptors accoring to Brown et al. A 40x40 window around each point was taken, blurred, then sampled down to be 8x8. This array can then be flattened and compared to the descriptors from the points in the other images. Examples of a point and its corresponding descriptor (before flattening) are shown below.</p>
+      <figure>
+        <img src="media/pt1.png" alt="Blending example 3">
+        <figcaption>Point</figcaption>
+      </figure>
+      <figure>
+        <img src="media/pt1fd.png" alt="Blending example 3">
+        <figcaption> Corresponding Descriptor</figcaption>
+      </figure>
+      <br>
+
+      <figure>
+        <img src="media/pt2.png" alt="Blending example 3">
+        <figcaption>Point</figcaption>
+      </figure>
+      <figure>
+        <img src="media/pt2fd.png" alt="Blending example 3">
+        <figcaption> Corresponding Descriptor</figcaption>
+      </figure>
+    </section>
+
+
+    <section id ="ransac">
+      <h2>Feature Matching, RANSAC, and Mosaics</h2>
+
+      <p>I compared the feature descriptors for each point to the descriptors of the points from the other image. Using the algorithm described in the Brown et al. paper, we compare the 1-Nearest Neighbor with the 2-Nearest Neighbor, and if the ratio of these is below a set threshold, then we include this as a match.</p>
+      <p><br> From here, I performed a random sample consensus (RANSAC). The idea is essentially taking 4 random points at a time, and determining the homography based on these 4 points. The number of outliers and inliers are counted for each homography, and we simply choose the one with the largest number of inliers as our homography matrix. We use the list of inliers as our input points for the exact procedure as described at the beginning of this page/project.</p>
+      <p><br> The following are examples of mosaics made from the automatic feature detection method, the first is the same input images as part 1, the rest are new mosaics.</p>
+      <figure>
+        <img src="media/17.png" alt="Blending example 3">
+        <figcaption>BWW Sign</figcaption>
+      </figure>
+      <figure>
+        <img src="media/18.png" alt="Blending example 1">
+        <figcaption>BWW Sign, Diff Angle</figcaption>
+      </figure>
+      <figure>
+        <img src="media/mosaicOut52.jpg" alt="Blending example 2">
+        <figcaption>Mosaic Together</figcaption>
+      </figure>
+      <br>
+      <figure>
+        <img src="media/dino1.jpeg" alt="Blending example 3">
+        <figcaption>VLSB Dinosaur</figcaption>
+      </figure>
+      <figure>
+        <img src="media/dino2.jpeg" alt="Blending example 1">
+        <figcaption>VLSB Dinosaur 2</figcaption>
+      </figure>
+      <figure>
+        <img src="media/mosaicOut208.jpg" alt="Blending example 2">
+        <figcaption>Mosaic Together</figcaption>
+      </figure>
+      <br>
+      <figure>
+        <img src="media/flag.jpeg" alt="Blending example 3">
+        <figcaption>Cal Flag</figcaption>
+      </figure>
+      <figure>
+        <img src="media/flag2.jpeg" alt="Blending example 1">
+        <figcaption>Cal Flag 2</figcaption>
+      </figure>
+      <figure>
+        <img src="media/flag3.jpg" alt="Blending example 2">
+        <figcaption>Mosaic Together</figcaption>
+      </figure>
+    </section>
+
+
+    <section id ="take">
+      <h2>Takeaways</h2>
+      <p>The most interseting takeaway from this project for me was the RANSAC algorithm. It was unique to see a randomized algorithm put to use, as though I have studied things like this in the past before, I have never truly used in a project before. It is interesting how these mosaics are non-deterministic due to the fact that the algorithm is randomized, yet the reslts will be extremely similar despite the randomness.</p>
+    </section>
+
 
     <!-- Footer -->
     <footer>
