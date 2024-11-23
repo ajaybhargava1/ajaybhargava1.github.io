@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Processing Techniques</title>
+  
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto&display=swap">
+
+   <!-- MathJax for rendering LaTeX equations -->
+   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+  <style>
+    /* General page styling */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* Sidebar navigation styling */
+    .sidebar {
+      width: 220px;
+      background-color: #5b0831;
+      padding-top: 30px;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 15px;
+      text-decoration: none;
+      border-radius: 10px;
+      margin: 15px 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+    }
+
+    .sidebar a:hover {
+      background-color: #8d99ae;
+      transform: scale(1.05);
+    }
+
+    .sidebar a.active {
+      background-color: #edf2f4;
+      color: #2b2d42;
+      font-weight: bold;
+    }
+
+    /* Content area styling */
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      color: #edf2f4;
+    }
+
+    img[src="media/campfire_man.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/man_campfire.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/walrus_obama.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/surfer_fruit.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/fruit_surfer.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/sumo_tiger.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/tiger_sumo.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/obama_walrus.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/skull.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    img[src="media/chicken.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    img[src="media/panda.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #440f2a;
+    }
+
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #edf2f4;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Image container styling */
+    figure {
+      display: inline-block;
+      width: 20%;
+      margin: 0 1.33% 20px; /* Adds spacing between images */
+      text-align: center;
+    }
+
+    figure:hover{
+        transform: scale(1.03);
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 1.5s ease;
+    }
+
+    figcaption {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* Title and byline styling */
+    .header {
+      background-color: #5b0831;
+      color: #0c99d1;
+      text-align: center;
+      padding: 40px 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 48px;
+    }
+
+    .header p {
+      font-size: 22px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Section styling */
+    section {
+      background-color: #fff;
+      padding: 40px 30px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    section:hover {
+      transform: scale(1.01);
+    }
+
+    /* Add spacing between title box and first section */
+    .content section:first-of-type {
+      margin-top: 30px;
+    }
+
+    /* Highlight active section in the table of contents */
+    .active-section {
+      font-weight: bold;
+      color: #2b2d42;
+    }
+
+    /* Smooth scrolling for section links */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Footer for extra styling */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Table of Contents -->
+  <div class="sidebar">
+    <a href="#background" id="toc-filters">Background</a>
+    <a href="#forward" id="toc-filters">Implementing the Foward Process</a>
+    <a href="#classical" id="toc-filters">Classical Denoising</a>
+    <a href="#onestep" id="toc-filters">One Step Denoising</a>
+    <a href="#iterative" id="toc-filters">Iterative Denoising</a>
+    <a href="#sampling" id="toc-filters">Sampling from the Diffusion Model</a>
+    <a href="#cfg" id="toc-filters">Classifier-Free Guidance</a>
+    <a href="#hand" id="toc-filters">Editing Hand-Drawn Images</a>
+    <a href="#inpainting" id="toc-filters">Inpainting</a>
+    <a href="#conditional" id="toc-filters">Text Conditional Image to Image Translation</a>
+    <a href="#anagram" id="toc-filters">Visual Anagrams</a>
+    <a href="#hybrid" id="toc-filters">Hybrid Images</a>
+    <a href="#single" id="toc-filters">Training a Single-Step UNet</a>
+    <a href="#time" id="toc-filters">Time Conditioned UNet</a>
+    <a href="#class" id="toc-filters">Class Conditioned UNet</a>
+
+
+
+
+  </div>
+  
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header with Title and Byline -->
+    <div class="header">
+      <h1>Diffusion Models</h1>
+      <h3>By Ajay Bhargava</h3>
+    </div>
+
+    <!-- Section 1 -->
+
+    <section id = "background">
+        <h2>Background</h2>
+     </section>
+
+     <section id = "forward">
+        <h2>Implementing the Forward Process</h2>
+        <p>The first step of this project was creating a way to add noise to any image. Taking in an image and a timestep on the range [0, 1000], where 0 represents the clean image and 1000 is pure noise, I used the following equation to output the image with a certain amount of noise.</p>
+        <p>
+
+            \[
+            {x}_t = \sqrt{\bar{\alpha}_t} {x}_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon \quad \text{where} \quad \epsilon \sim \mathcal{N}(0, 1)
+            
+            \]
+
+            \[
+            \bar{\alpha_t} \text{ represents the noise coefficient, as chosen by DeepFloyd's creators.}
+            \]
+        </p>
+            <br>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile, t=0</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile250.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=250</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile500.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=500</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile750.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=750</figcaption>
+        </figure>
+
+    </section>
+
+     <section id = "classical">
+        <h2>Classical Denoising</h2>
+        <p>The next step is to take in the noisy images as generated above, and attempt to 'denoise' them. The next couple of sections will investigate different ways to do so.</p>
+        <p>One method in which these images can be noised is simply Gaussian blur filtering. By applying a Gaussian filter, it blurs the image, but it gives poor results, as demonstrated below.</p>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile, t=0</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile250.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=250</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile500.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=500</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile750.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=750</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile, t=0</figcaption>
+        </figure>
+        <figure>
+            <img src="media/classic250.png" alt="Campanile Image 1">
+            <figcaption>Classically Denoised Campanile, t=250</figcaption>
+        </figure>
+        <figure>
+            <img src="media/classic500.png" alt="Campanile Image 1">
+            <figcaption>Classically Denoised Campanile, t=500</figcaption>
+        </figure>
+        <figure>
+            <img src="media/classic500.png" alt="Campanile Image 1">
+            <figcaption>Classically Denoised Campanile, t=750</figcaption>
+        </figure>
+    </section>
+     <section id = "onestep">
+        <h2>One Step Denoising</h2>
+        <p>The results of using classical denoising are subpar. We can use the convolutional neural net UNet in order to achieve better results. This model is trained on a vast number of image pairs, between their noisy and denoised forms. This can predict Gaussian noise added to an image, and using this prediction, we can recover an estimate of the original image.</p>
+        <p>This section demonstrates one step denoising, where we pass in the noisy image as well as its timestep, and the model makes a single prediction about the noise. The examples of the noisy and the one step denoised images are below.</p>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile, t=0</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile250.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=250</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile500.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=500</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile750.png" alt="Campanile Image 1">
+            <figcaption>Noisy Campanile, t=750</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile, t=0</figcaption>
+        </figure>
+        <figure>
+            <img src="media/onestep250.png" alt="Campanile Image 1">
+            <figcaption>One Step Denoised Campanile, t=250</figcaption>
+        </figure>
+        <figure>
+            <img src="media/onestep500.png" alt="Campanile Image 1">
+            <figcaption>One Step Denoised Campanile, t=500</figcaption>
+        </figure>
+        <figure>
+            <img src="media/onestep750.png" alt="Campanile Image 1">
+            <figcaption>One Step Denoised Campanile, t=750</figcaption>
+        </figure>
+    </section>
+
+     <section id = "iterative">
+        <h2>Iterative Denoising</h2>
+        <p>The above one step denoising does provide better results. We can build on this by having the model predict the nois at each timestep, instead of entirely at once. The denoising is iteratively applied at each timestep, from our start to t = 0, which is the denoised image. The output of this is shown below for each of the timesteps, as well as the results of the other methods for comparison.</p>
+            <figure style="width: 15%;">
+            <img src="media/90.png" alt="Campanile Image 1">
+            <figcaption>Iterative Denoising at t=90</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/240.png" alt="Campanile Image 1">
+            <figcaption>Iterative Denoising at t=240</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/390.png" alt="Campanile Image 1">
+            <figcaption>Iterative Denoising at t=390</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/540.png" alt="Campanile Image 1">
+            <figcaption>Iterative Denoising at t=540</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/690.png" alt="Campanile Image 1">
+            <figcaption>Iterative Denoising at t=690</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Original Campanile</figcaption>
+        </figure>
+        <figure>
+            <img src="media/iterative.png" alt="Campanile Image 1">
+            <figcaption>Iterative Denoising Output</figcaption>
+        </figure>
+        <figure>
+            <img src="media/onestep.png" alt="Campanile Image 1">
+            <figcaption>One Step Denoising Output</figcaption>
+        </figure>
+        <figure>
+            <img src="media/gaussian.png" alt="Campanile Image 1">
+            <figcaption>Gaussian Blur Output</figcaption>
+        </figure>
+     </section>
+
+     <section id = "sampling">
+        <h2>Sampling from the Diffusion Model</h2>
+        <p>We used the model above to predict noise based off an image that we already had, from a set timestep. However, we can generalize this to simply set out timestep to to the maximum, and pass in an image of complete noise. This essentially samples random images from the UNet model. 5 examples of this are shown below.</p>
+     
+        <figure style="width: 15%;">
+            <img src="media/sample5.png" alt="Campanile Image 1">
+            <figcaption>Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/sample4.png" alt="Campanile Image 1">
+            <figcaption>Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/sample1.png" alt="Campanile Image 1">
+            <figcaption>Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/sample3.png" alt="Campanile Image 1">
+            <figcaption>Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/sample2.png" alt="Campanile Image 1">
+            <figcaption>Sample Generated Image</figcaption>
+        </figure>
+    </section>
+
+     <section id = "cfg">
+        <h2>Classifier-Free Guidance</h2>
+        <p>The images generated above are unique, but not very realistic. One way we can generate better images is through classifier-free guidance. We can update our noise prediction to use a combination of unconditional and conditional noise, as demonstrated in the equation below. This yields improved results than before. </p>
+        <p>
+
+            \[
+            \epsilon = \epsilon_u + \gamma(\epsilon_c - \epsilon_u) \quad 
+            
+            
+            \]
+
+            \[
+            \text{where} \quad \gamma \quad \text{is the strength of the CFG}
+            \]
+
+        </p>
+        <figure style="width: 15%;">
+            <img src="media/cfg3.png" alt="Campanile Image 1">
+            <figcaption>CFG Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/cfg4.png" alt="Campanile Image 1">
+            <figcaption>CFG Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/cfg5.png" alt="Campanile Image 1">
+            <figcaption>CFG Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/cfg1.png" alt="Campanile Image 1">
+            <figcaption>CFG Sample Generated Image</figcaption>
+        </figure>
+        <figure style="width: 15%;">
+            <img src="media/cfg2.png" alt="Campanile Image 1">
+            <figcaption>CFG Sample Generated Image</figcaption>
+        </figure>
+     </section>
+
+     <section id = "translation">
+        <h2>Image to Image Translation</h2>
+        <p>A similar process can be followed for producing image translations. By blurring the image at different levels, and then trying to predict the original image, we can create a range of pictures, with each one getting more and more similar to the original image.
+            The i_start variable represents where we start our image from, with lower values meaning higher noise is added at the beginning, and higher values meaning less noise is added.
+        </p>
+
+        <figure style="width: 11%;">
+            <img src="media/iit1.png" alt="Campanile Image 1">
+            <figcaption>i_start = 1</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/iit2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/iit3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/iit4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/iit5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/iit6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/ot1.png" alt="Campanile Image 1">
+            <figcaption>i_start = 1</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/ot2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/ot3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/ot4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/ot5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/ot6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/oski.jpg" alt="Campanile Image 1">
+            <figcaption>Oski</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/f1.png" alt="Campanile Image 1">
+            <figcaption>i_start = 1</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/f2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/f3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/f4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/f5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/f6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/fish.jpeg" alt="Campanile Image 1">
+            <figcaption>Fish in Coral</figcaption>
+        </figure>
+        
+     </section>
+
+     <section id = "hand">
+        <h2>Editing Hand-Drawn Images</h2>
+        <p>This method is particularily interesting with hand drawn images, it can turn anything you draw into something more realistic. I chose one cartoon, as well as two random doodles I made and ran them through this process, and the results are shown below. 
+        </p>
+        <figure style="width: 11%;">
+            <img src="media/s1.png" alt="Campanile Image 1">
+            <figcaption>i_start = 1</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/s2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/s3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/s4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/s5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/s6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/spongebob.png" alt="Campanile Image 1">
+            <figcaption>Spongebob</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/d1.png" alt="Campanile Image 1">
+            <figcaption>i_start = 1</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/d2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/d3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/d4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/d5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/d6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/d.png" alt="Campanile Image 1">
+            <figcaption>My Drawing</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/a1.png" alt="Campanile Image 1">
+            <figcaption>i_start = 1</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/a2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/a3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/a4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/a5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/a6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/a.png" alt="Campanile Image 1">
+            <figcaption>My Drawing</figcaption>
+        </figure>
+        
+     </section>
+
+     <section id = "inpainting">
+        <h2>Inpainting</h2>
+        <p>We can follow a similar method in order to accomplish inpainting. This essentially takes in an image and a mask, and predicts only the part inside the mask, while leaving the rest unchanged. At each step, we force the black part of the mask to have the pixels from the original image (with the correct noise added), and the model's output for the mask area is kept. The results of images and their corresponding masks are shown below.</p>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile</figcaption>
+        </figure>
+        <figure>
+            <img src="media/mask.png" alt="Campanile Image 1">
+            <figcaption>Mask</figcaption>
+        </figure>
+        <figure>
+            <img src="media/replace.png" alt="Campanile Image 1">
+            <figcaption>Portion Replaced</figcaption>
+        </figure>
+        <figure>
+            <img src="media/inpaint.png" alt="Campanile Image 1">
+            <figcaption>Campanile Inpainted</figcaption>
+        </figure>
+        <figure>
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile</figcaption>
+        </figure>
+        <figure>
+            <img src="media/mask2.png" alt="Campanile Image 1">
+            <figcaption>Mask</figcaption>
+        </figure>
+        <figure>
+            <img src="media/replace2.png" alt="Campanile Image 1">
+            <figcaption>Portion Replaced</figcaption>
+        </figure>
+        <figure>
+            <img src="media/inpaint2.png" alt="Campanile Image 1">
+            <figcaption>Campanile Inpainted</figcaption>
+        </figure>
+        <figure>
+            <img src="media/ajay.jpg" alt="Campanile Image 1">
+            <figcaption>Me</figcaption>
+        </figure>
+        <figure>
+            <img src="media/mask3.png" alt="Campanile Image 1">
+            <figcaption>Mask</figcaption>
+        </figure>
+        <figure>
+            <img src="media/replace3.png" alt="Campanile Image 1">
+            <figcaption>Portion Replaced</figcaption>
+        </figure>
+        <figure>
+            <img src="media/inpaint3.png" alt="Campanile Image 1">
+            <figcaption>Not Me</figcaption>
+        </figure>
+     </section>
+
+     <section id = "conditional">
+        <h2>Text Conditional Image to Image Translation</h2>
+        <p>Currently, the model is predicting noise based off of the prompt "a high quality image". If we change the prompt to be something more specific, we can generate images that are closer to that prompt as the noise gets higher. Some examples of this are shown below, with the original image on the right, and the prompt that was given is on the left (where i_start = 1).</p>
+
+        <figure style="width: 11%;">
+            <img src="media/r1.png" alt="Campanile Image 1">
+            <figcaption>Rocket Ship</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/r2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/r3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/r4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/r5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/r6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/campanile0.png" alt="Campanile Image 1">
+            <figcaption>Campanile</figcaption>
+        </figure>
+
+        <figure style="width: 11%;">
+            <img src="media/c1.png" alt="Campanile Image 1">
+            <figcaption>Cartoon Flying Car</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/c2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/c3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/c4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/c5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/c6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/car.jpg" alt="Campanile Image 1">
+            <figcaption>Flying Car</figcaption>
+        </figure>
+
+        <figure style="width: 11%;">
+            <img src="media/g1.png" alt="Campanile Image 1">
+            <figcaption>Guy wearing glasses</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/g2.png" alt="Campanile Image 1">
+            <figcaption>i_start = 3</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/g3.png" alt="Campanile Image 1">
+            <figcaption>i_start = 5</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/g4.png" alt="Campanile Image 1">
+            <figcaption>i_start = 7</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/g5.png" alt="Campanile Image 1">
+            <figcaption>i_start = 10</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/g6.png" alt="Campanile Image 1">
+            <figcaption>i_start = 20</figcaption>
+        </figure>
+        <figure style="width: 11%;">
+            <img src="media/sona.jpg" alt="Campanile Image 1">
+            <figcaption>Sona</figcaption>
+        </figure>
+     </section>
+
+     <section id = "anagram">
+        <h2>Visual Anagrams</h2>
+        <p>Another unique application of this process is creating a visual anagram. This is where the image appears to be two different things depending on which way it is flipped. To create this, we average the predicted noise of the first prompt, along with the second prompt's predicted noise flipped vertically. The results of this are shown below, you can hover over the image to flip them as well. </p>
+        <figure>
+            <img src="media/campfire_man.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of People Around a Campfire</figcaption>
+        </figure>
+        <figure>
+            <img src="media/man_campfire.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of a Man</figcaption>
+        </figure>
+        <figure>
+            <img src="media/tiger_sumo.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of a Tiger</figcaption>
+        </figure>
+        <figure>
+            <img src="media/sumo_tiger.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of Sumo Wrestler</figcaption>
+        </figure>
+        <br>
+        <figure>
+            <img src="media/obama_walrus.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of Obama</figcaption>
+        </figure>
+        <figure>
+            <img src="media/walrus_obama.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of a Walrus</figcaption>
+        </figure>
+        <figure>
+            <img src="media/surfer_fruit.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of a Surfer</figcaption>
+        </figure>
+        <figure>
+            <img src="media/fruit_surfer.png" alt="Warped Image 1">
+            <figcaption>Oil Painting of Fruits</figcaption>
+        </figure>
+        
+     </section>
+
+     <section id = "hybrid">
+        <h2>Hybrid Images</h2>
+        <p>Hybrid images are where the image appears to be one thing when up close, but another from afar. In this case, we can predict the noise for two different prompts, and at each step, run one through a high-pass filter, and one through a low-pass filter. This enables us to create the illusions as seen below. Hover over the images to view them zoomed out.</p>
+        <figure>
+            <img src="media/skull.png" alt="Warped Image 1">
+            <figcaption>Waterfall up close, Skull from afar</figcaption>
+        </figure>
+        <figure>
+            <img src="media/chicken.png" alt="Warped Image 1">
+            <figcaption>Puppies up close, Chicken from afar</figcaption>
+        </figure>
+        <figure>
+            <img src="media/panda.png" alt="Warped Image 1">
+            <figcaption>Winter Day up close, Panda from afar</figcaption>
+        </figure>
+     </section>
+
+     <section id = "single">
+        <h2>Training a Single-Step UNet</h2>
+        <p>The above sections all rely on a pretrained UNet in order to perform the tasks. The following sections will now investigate how I can train my own model to achieve similar results.</p>
+        <p>I began by creating a single-step denoising UNet. It takes in a noisy image, and predicts the original image by optimizing over an L2 loss between the original and outputted images. I followed the architecture shown below:</p>
+     <figure style="width: 70%;">
+        <img src="media/unet.png" alt="Warped Image 1">
+        <figcaption>UNet Architecture</figcaption>
+     </figure>
+     <p>I trained this model using L2 loss function and Adam optimizer, the loss across iterations is shown below.</p>
+     <figure style="width: 45%;">
+        <img src="media/loss.png" alt="Warped Image 1">
+        <figcaption>Loss Graph</figcaption>
+     </figure>
+     <p>Here are the results shown after 1 epoch. </p>
+     <figure>
+        <img src="media/11.png" alt="Warped Image 1">
+        <figcaption>Original Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/12.png" alt="Warped Image 1">
+        <figcaption>Noisy Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/13.png" alt="Warped Image 1">
+        <figcaption>Denoised Image (After 1 epoch)</figcaption>
+     </figure>
+     <br>
+     <figure>
+        <img src="media/14.png" alt="Warped Image 1">
+        <figcaption>Original Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/15.png" alt="Warped Image 1">
+        <figcaption>Noisy Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/16.png" alt="Warped Image 1">
+        <figcaption>Denoised Image (After 1 epoch)</figcaption>
+     </figure>
+     <br>
+     <figure>
+        <img src="media/17.png" alt="Warped Image 1">
+        <figcaption>Original Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/18.png" alt="Warped Image 1">
+        <figcaption>Noisy Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/19.png" alt="Warped Image 1">
+        <figcaption>Denoised Image (After 1 epoch)</figcaption>
+     </figure>
+     <p>Here are the results shown after all 5 epochs. </p>
+     <figure>
+        <img src="media/51.png" alt="Warped Image 1">
+        <figcaption>Original Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/52.png" alt="Warped Image 1">
+        <figcaption>Noisy Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/53.png" alt="Warped Image 1">
+        <figcaption>Denoised Image (After 5 epochs)</figcaption>
+     </figure>
+     <br>
+     <figure>
+        <img src="media/54.png" alt="Warped Image 1">
+        <figcaption>Original Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/55.png" alt="Warped Image 1">
+        <figcaption>Noisy Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/56.png" alt="Warped Image 1">
+        <figcaption>Denoised Image (After 5 epochs)</figcaption>
+     </figure>
+     <br>
+     <figure>
+        <img src="media/57.png" alt="Warped Image 1">
+        <figcaption>Original Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/58.png" alt="Warped Image 1">
+        <figcaption>Noisy Image</figcaption>
+     </figure>
+     <figure>
+        <img src="media/59.png" alt="Warped Image 1">
+        <figcaption>Denoised Image (After 5 epochs)</figcaption>
+     </figure>
+     <p>This model was trained with a σ value of 0.5, meaning the random noise generated is multipled by 0.5 before being added to the original image. We can vary this value, and test how well our model trained on 0.5 will work for other values.</p>
+     <figure style="width: 10%;">
+        <img src="media/p01.png" alt="Warped Image 1">
+        <figcaption>Noisy, σ = 0 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p11.png" alt="Warped Image 1">
+        <figcaption>Noisy, σ = 0.2 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p21.png" alt="Warped Image 1">
+        <figcaption>Noisy, σ = 0.4 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p31.png" alt="Warped Image 1">
+        <figcaption>Noisy, σ = 0.5 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p41.png" alt="Warped Image 1">
+        <figcaption>Noisy, σ = 0.6 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p51.png" alt="Warped Image 1">
+        <figcaption>Noisy, σ = 0.8 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p61.png" alt="Warped Image 1">
+        <figcaption>Noisy, σ = 1 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p02.png" alt="Warped Image 1">
+        <figcaption>Denoised, σ = 0 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p12.png" alt="Warped Image 1">
+        <figcaption>Denoised, σ = 0.2 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p22.png" alt="Warped Image 1">
+        <figcaption>Denoised, σ = 0.4 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p32.png" alt="Warped Image 1">
+        <figcaption>Denoised, σ = 0.5 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p42.png" alt="Warped Image 1">
+        <figcaption>Denoised, σ = 0.6 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p52.png" alt="Warped Image 1">
+        <figcaption>Denoised, σ = 0.8 </figcaption>
+     </figure>
+     <figure style="width: 10%;">
+        <img src="media/p62.png" alt="Warped Image 1">
+        <figcaption>Denoised, σ = 1 </figcaption>
+     </figure>
+    </section>
+    <section id = "time">
+        <h2>Time Conditioned UNet</h2>
+        <p>As we saw from the earlier results of image denoising, better results can be found by iteratively denoising an image. The following part is based off of the paper <a href="https://arxiv.org/abs/2006.11239" target="_blank">Denoising Diffusion Probabilistic Models (2020)</a>.</p>
+        <p>By adding a scalar t as a parameter to our model, we can condition it based off of the time, the method in which t is used is demonstrated in the image below.</p>
+        <figure style="width: 70%;">
+            <img src="media/unetT.png" alt="Warped Image 1">
+            <figcaption>UNet Architecture with t</figcaption>
+         </figure>
+         <p>The training algorithm for this model is as follows:</p>
+         <figure style="width: 70%;">
+            <img src="media/alg.png" alt="Warped Image 1">
+            <figcaption>Training Algorithm</figcaption>
+         </figure>
+         <p>The loss curve for the training of this model is shown below:</p>
+         <figure style="width: 50%;">
+            <img src="media/lossTime.png" alt="Warped Image 1">
+            <figcaption>Training Algorithm</figcaption>
+         </figure>
+         <p>Results for this model shown at 5 epochs and 20 epochs are shown below:</p>
+         <figure style = "width: 15%;">
+            <img src="media/5n1.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5n2.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5n3.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/n2.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5n5.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5d1.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 5 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5d2.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 5 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5d3.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 5 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5d4.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 5 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/5d5.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 5 epochs</figcaption>
+         </figure>
+         <br>
+         <br>
+         <br>
+
+         <br>
+         <figure style = "width: 15%;">
+            <img src="media/n1.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/n2.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/n3.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/n4.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/n5.png" alt="Warped Image 1">
+            <figcaption>Pure Noise</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/dg1.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 20 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/dg2.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 20 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/dg3.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 20 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/dg4.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 20 epochs</figcaption>
+         </figure>
+         <figure style = "width: 15%;">
+            <img src="media/dg5.png" alt="Warped Image 1">
+            <figcaption>Generated Image at 20 epochs</figcaption>
+         </figure>
+         
+
+    </section>
+    <section id = "class">
+        <h2>Class-Conditioned UNet</h2>
+        <p>We can improve on these results by conditioning the UNet on the digits 0-9. This involves training on the digit numbers itself with each of the images, and passing this as a parameter through the model as well.</p>
+        <figure style="width: 70%;">
+            <img src="media/alg2.png" alt="Warped Image 1">
+            <figcaption>Training Algorithm</figcaption>
+        </figure>
+        <p>The loss curve for the training of this model is shown below:</p>
+        <figure>
+            <img src="media/classLoss.png" alt="Warped Image 1">
+            <figcaption>Loss Curve</figcaption>
+
+        </figure>
+        <p>Results of the model shown at 5 epochs is shown below.</p>
+         <figure style = "width: 7%;">
+            <img src="media/50c1.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/51c1.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/52c1.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/53c1.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/54c1.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/55c1.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/56c1.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/57c1.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/58c1.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/59c1.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/50c2.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/51c2.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/52c2.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/53c2.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/54c2.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/55c2.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/56c2.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/57c2.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/58c2.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/59c2.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/50c3.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/51c3.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/52c3.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/53c3.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/54c3.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/55c3.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/56c3.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/57c3.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/58c3.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/59c3.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/50c4.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/51c4.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/52c4.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/53c4.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/54c4.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/55c4.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/56c4.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/57c4.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/58c4.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/59c4.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+         <br>
+         <br>
+         <p>Results of the model shown at 20 epochs is shown below.</p>
+         <figure style = "width: 7%;">
+            <img src="media/20c1.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/21c1.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/22c1.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/23c1.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/524c1.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/25c1.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/26c1.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/27c1.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/28c1.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/29c1.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/20c2.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/21c2.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/22c2.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/23c2.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/24c2.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/25c2.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/26c2.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/27c2.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/28c2.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/29c2.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/20c3.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/21c3.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/22c3.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/23c3.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/24c3.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/25c3.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/26c3.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/27c3.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/28c3.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/29c3.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/20c4.png" alt="Warped Image 1">
+            <figcaption>Class 0</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/21c4.png" alt="Warped Image 1">
+            <figcaption>Class 1</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/22c4.png" alt="Warped Image 1">
+            <figcaption>Class 2</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/23c4.png" alt="Warped Image 1">
+            <figcaption>Class 3</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/24c4.png" alt="Warped Image 1">
+            <figcaption>Class 4</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/25c4.png" alt="Warped Image 1">
+            <figcaption>Class 5</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/26c4.png" alt="Warped Image 1">
+            <figcaption>Class 6</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/27c4.png" alt="Warped Image 1">
+            <figcaption>Class 7</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/28c4.png" alt="Warped Image 1">
+            <figcaption>Class 8</figcaption>
+         </figure>
+         <figure style = "width: 7%;">
+            <img src="media/29c4.png" alt="Warped Image 1">
+            <figcaption>Class 9</figcaption>
+         </figure>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+      © 2024 Ajay Bhargava - Image Processing Techniques
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript for highlighting the active section in the sidebar
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const links = document.querySelectorAll('.sidebar a');
+
+      let currentSection = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === currentSection) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
