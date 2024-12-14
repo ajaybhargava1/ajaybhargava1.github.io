@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Processing Techniques</title>
+  
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto&display=swap">
+
+   <!-- MathJax for rendering LaTeX equations -->
+   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+  <style>
+    /* General page styling */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* Sidebar navigation styling */
+    .sidebar {
+      width: 220px;
+      background-color: #32babc;
+      padding-top: 30px;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 15px;
+      text-decoration: none;
+      border-radius: 10px;
+      margin: 15px 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+    }
+
+    .sidebar a:hover {
+      background-color: #8d99ae;
+      transform: scale(1.05);
+    }
+
+    .sidebar a.active {
+      background-color: #edf2f4;
+      color: #2b2d42;
+      font-weight: bold;
+    }
+
+    /* Content area styling */
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      color: #edf2f4;
+    }
+
+    img[src="media/campfire_man.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/man_campfire.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/walrus_obama.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/surfer_fruit.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/fruit_surfer.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/sumo_tiger.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/tiger_sumo.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/obama_walrus.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/skull.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    img[src="media/chicken.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    img[src="media/panda.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color:  #32babc;
+    }
+
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #edf2f4;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Image container styling */
+    figure {
+      display: inline-block;
+      width: 20%;
+      margin: 0 1.33% 20px; /* Adds spacing between images */
+      text-align: center;
+    }
+
+    figure:hover{
+        transform: scale(1.03);
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 1.5s ease;
+    }
+
+    figcaption {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* Title and byline styling */
+    .header {
+      background-color:  #32babc;
+      color: #0c99d1;
+      text-align: center;
+      padding: 40px 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 48px;
+    }
+
+    .header p {
+      font-size: 22px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Section styling */
+    section {
+      background-color: #fff;
+      padding: 40px 30px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    section:hover {
+      transform: scale(1.01);
+    }
+
+    /* Add spacing between title box and first section */
+    .content section:first-of-type {
+      margin-top: 30px;
+    }
+
+    /* Highlight active section in the table of contents */
+    .active-section {
+      font-weight: bold;
+      color: #2b2d42;
+    }
+
+    /* Smooth scrolling for section links */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Footer for extra styling */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Table of Contents -->
+  <div class="sidebar">
+    <a href="#random" id="toc-filters">Randomly Sampled Texture</a>
+    <a href="#overlap" id="toc-filters">Overlapping Patches</a>
+    <a href="#seam" id="toc-filters">Seam Finding</a>
+    <a href="#transfer" id="toc-filters">Texture Transfer</a>
+
+    
+
+
+  </div>
+  
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header with Title and Byline -->
+    <div class="header">
+      <h1>Texture Generation and Image Quilting</h1>
+      <h3>By Ajay Bhargava</h3>
+    </div>
+
+    <!-- Section 1 -->
+
+
+    <section id = "random">
+      <h2>Randomly Sampled Texture</h2>
+      <p>The idea behind this project is to take a small sample of a texture and create a larger and expanded version of the same texture. In its most basic form, this can be done by randomly sampling patches of the original texture onto a new output image. Some example textures and their randomly quilted outputs are shown below.</p>
+      <figure>
+        <img src="media/bricks_small.jpg" alt="face">
+        <figcaption>Original Texture Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/sketch.jpg" alt="face">
+        <figcaption>Original Texture Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/bread.jpg" alt="face">
+        <figcaption>Original Texture Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/text_small.jpg" alt="face">
+        <figcaption>Original Texture Image</figcaption>
+      </figure>
+      <figure>
+        <img src="media/brick_random.png" alt="face">
+        <figcaption>Randomly Quilted Texture</figcaption>
+      </figure>
+      <figure>
+        <img src="media/sketch_random.png" alt="face">
+        <figcaption>Randomly Quilted Texture</figcaption>
+      </figure>
+      <figure>
+        <img src="media/bread_random.png" alt="face">
+        <figcaption>Randomly Quilted Texture</figcaption>
+      </figure>
+      <figure>
+        <img src="media/text_random.png" alt="face">
+        <figcaption>Randomly Quilted Texture</figcaption>
+      </figure>
+      </section>
+
+      
+      <section id = "overlap">
+        <h2>Overlapping Patches</h2>
+        <p>The random method demonstrated above does a poor job - as the seams between the patches are obvious. We can improve upon this by using overlapping patches and choosing the best match to place as the next patch. I started by placing a randomly selected patch at the top left, then iterated through the output image and chose the patch with the best match. This best match metric was determined using ssd, finding the patch in the sample image that when placed onto the output image in an overlapping manner, is most similar. The intention is to make the patches blend into each other nicely. Results from this are shown below.</p>
+        <figure>
+          <img src="media/bricks_small.jpg" alt="face">
+          <figcaption>Original Texture Image</figcaption>
+        </figure>
+        <figure>
+          <img src="media/sketch.jpg" alt="face">
+          <figcaption>Original Texture Image</figcaption>
+        </figure>
+        <figure>
+          <img src="media/bread.jpg" alt="face">
+          <figcaption>Original Texture Image</figcaption>
+        </figure>
+        <figure>
+          <img src="media/text_small.jpg" alt="face">
+          <figcaption>Original Texture Image</figcaption>
+        </figure>
+        <figure>
+          <img src="media/brick_simple.png" alt="face">
+          <figcaption>Overlapping Patches Texture</figcaption>
+        </figure>
+        <figure>
+          <img src="media/sketch_simple.png" alt="face">
+          <figcaption>Overlapping Patches Texture</figcaption>
+        </figure>
+        <figure>
+          <img src="media/bread_simple.png" alt="face">
+          <figcaption>Overlapping Patches Texture</figcaption>
+        </figure>
+        <figure>
+          <img src="media/text_simple.png" alt="face">
+          <figcaption>Overlapping Patches Texture</figcaption>
+        </figure>
+      </section>
+
+      <section id = "seam">
+        <h2>Seam Finding</h2>
+        <p>The overlapping patches method as demonstrated above does a significantly better job than simply the randomized texture. However, there are still some visible artifacts that exist in the final image. The next step would be to better blend the overlapping patches when combining. The same method to choose the new patch from above is used, but instead of simply placing the new patch on top of the old one, I found the most efficient seam (either horizontally or vertically). The error cost for each pixel was calculated (how different the new patch is to the existing patch) - and then the shortest path from one edge to another edge was calculated to use as the seam. This was accomplished using Dijkstra's Algorithm to find single source shortest paths.</p>
+        <figure>
+          <img src="media/bricks_small.jpg" alt="face">
+          <figcaption>Original Texture Image</figcaption>
+        </figure>
+        <figure>
+          <img src="media/sketch.jpg" alt="face">
+          <figcaption>Original Texture Image</figcaption>
+        </figure>
+        <figure>
+          <img src="media/bread.jpg" alt="face">
+          <figcaption>Original Texture Image</figcaption>
+        </figure>
+        <br>
+        <figure>
+          <img src="media/brick_cut.png" alt="face">
+          <figcaption>Seam Texture</figcaption>
+        </figure>
+        <figure>
+          <img src="media/sketch_cut.png" alt="face">
+          <figcaption>Seam Texture</figcaption>
+        </figure>
+        <figure>
+          <img src="media/bread_cut.png" alt="face">
+          <figcaption>Seam Texture</figcaption>
+        </figure>
+
+      </section>
+
+      <section id = "transfer">
+        <h2>Texture Transfer</h2>
+        <p>The above seam minimizing technique can be utilized to produce some unique results – one of which is texture transfer. By altering the ssd function to not only account for this difference between our chosen patch and the output image, but to also account for the difference between the patch and some target image, we can generate a 'texture transfer' of one textre onto a target image. Some examples of this are shown below. </p>
+        <div style="display: flex; gap: 1px; justify-content: center; align-items: center;">
+              <!-- First image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/bread.jpg" alt="Derek" style="width: 200px;">
+                <figcaption>Bread Texture</figcaption>
+              </figure>
+          
+              <!-- Plus sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+          
+              <!-- Second image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/happy.png" alt="Nutmeg" style="width: 200px;">
+                <figcaption>Happy Face</figcaption>
+              </figure>
+          
+              <!-- Equals sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">=</div>
+          
+              <!-- Combined image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/happyBread.png" alt="Combined" style="width: 200px;">
+                <figcaption>Happy Face of Bread</figcaption>
+              </figure>
+            </div>
+            <div style="display: flex; gap: 1px; justify-content: center; align-items: center;">
+              <!-- First image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/white_small.jpg" alt="Derek" style="width: 200px;">
+                <figcaption>White Texture</figcaption>
+              </figure>
+          
+              <!-- Plus sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+          
+              <!-- Second image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/efros2.png" alt="Nutmeg" style="width: 200px;">
+                <figcaption>Efros Face</figcaption>
+              </figure>
+          
+              <!-- Equals sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">=</div>
+          
+              <!-- Combined image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/efrosC.png" alt="Combined" style="width: 200px;">
+                <figcaption>Efros of White Texture</figcaption>
+              </figure>
+            </div>
+            <div style="display: flex; gap: 1px; justify-content: center; align-items: center;">
+              <!-- First image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/sketch.jpg" alt="Derek" style="width: 200px;">
+                <figcaption>Sketch Texture</figcaption>
+              </figure>
+          
+              <!-- Plus sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">+</div>
+          
+              <!-- Second image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/bird.png" alt="Nutmeg" style="width: 200px;">
+                <figcaption>Bird Clipart</figcaption>
+              </figure>
+          
+              <!-- Equals sign -->
+              <div style="font-size: 36px; font-weight: bold; color: #333;">=</div>
+          
+              <!-- Combined image -->
+              <figure style="flex: 1; text-align: center;">
+                <img src="media/birdSketch.png" alt="Combined" style="width: 200px;">
+                <figcaption>Sketch of Bird</figcaption>
+              </figure>
+            </div>
+      </section>
+ 
+    
+    <!-- Footer -->
+    <footer>
+      © 2024 Ajay Bhargava - Image Processing Techniques
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript for highlighting the active section in the sidebar
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const links = document.querySelectorAll('.sidebar a');
+
+      let currentSection = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === currentSection) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

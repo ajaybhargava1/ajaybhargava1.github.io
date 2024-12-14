@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Processing Techniques</title>
+  
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto&display=swap">
+
+   <!-- MathJax for rendering LaTeX equations -->
+   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+  <style>
+    /* General page styling */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* Sidebar navigation styling */
+    .sidebar {
+      width: 220px;
+      background-color: #62320e;
+      padding-top: 30px;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      padding: 15px;
+      text-decoration: none;
+      border-radius: 10px;
+      margin: 15px 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+    }
+
+    .sidebar a:hover {
+      background-color: #8d99ae;
+      transform: scale(1.05);
+    }
+
+    .sidebar a.active {
+      background-color: #edf2f4;
+      color: #2b2d42;
+      font-weight: bold;
+    }
+
+    /* Content area styling */
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      color: #edf2f4;
+    }
+
+    img[src="media/campfire_man.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/man_campfire.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/walrus_obama.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/surfer_fruit.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/fruit_surfer.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/sumo_tiger.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/tiger_sumo.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/obama_walrus.png"]:hover {
+      transform: rotate(180deg);
+    }
+
+    img[src="media/skull.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    img[src="media/chicken.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    img[src="media/panda.png"]:hover {
+      transform: scale(0.4);
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color:  #62320e;
+    }
+
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: #edf2f4;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* Image container styling */
+    figure {
+      display: inline-block;
+      width: 20%;
+      margin: 0 1.33% 20px; /* Adds spacing between images */
+      text-align: center;
+    }
+
+    figure:hover{
+        transform: scale(1.03);
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 1.5s ease;
+    }
+
+    figcaption {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* Title and byline styling */
+    .header {
+      background-color:  #62320e;
+      color: #0c99d1;
+      text-align: center;
+      padding: 40px 0;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 48px;
+    }
+
+    .header p {
+      font-size: 22px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Section styling */
+    section {
+      background-color: #fff;
+      padding: 40px 30px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    section:hover {
+      transform: scale(1.01);
+    }
+
+    /* Add spacing between title box and first section */
+    .content section:first-of-type {
+      margin-top: 30px;
+    }
+
+    /* Highlight active section in the table of contents */
+    .active-section {
+      font-weight: bold;
+      color: #2b2d42;
+    }
+
+    /* Smooth scrolling for section links */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Footer for extra styling */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Table of Contents -->
+  <div class="sidebar">
+    <a href="#nose" id="toc-filters">Nose Tip Detection</a>
+    <a href="#face" id="toc-filters">Full Facial Keypoing Detection</a>
+    <a href="#large" id="toc-filters">Training on a Larger Set</a>
+    <a href="#pixel" id="toc-filters">Pixelwise Classification</a>
+    
+
+
+  </div>
+  
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Header with Title and Byline -->
+    <div class="header">
+      <h1>Facial Keypoint Detection with Neural Networks</h1>
+      <h3>By Ajay Bhargava</h3>
+    </div>
+
+    <!-- Section 1 -->
+
+
+    <section id = "nose">
+      <h2>Nose Tip Detection</h2>
+      <p>This project utilized the IMM Face Databse, a set of 244 annotated facial images.</p>
+      <p>The first step was to detect the nose feature using a convolutional neural network. Example images from the dataset and their annotated nose feature are shown below.</p>
+      <figure>
+         <img src="media/noseEx1.png" alt="face">
+         <figcaption>Example Annotated Image</figcaption>
+     </figure>
+     <figure>
+      <img src="media/noseEx2.png" alt="face">
+      <figcaption>Example Annotated Image</figcaption>
+     </figure>
+      <p>Using the first 192 images as a training set, and the final 48 images as the validation set, I trained a CNN with 3 convolutional layers, each with 20 hidden channels. The training and validation loss across the 20 epochs are shown below.</p>
+      <figure>
+         <img src="media/noseloss.png" alt="face">
+         <figcaption>Loss Curve</figcaption>
+      </figure>
+      <p>The model perfomed fairly well. 2 example outputs where the model performed well, as well as 2 chosen outputs where the model performed the worst. The red dots represent where the model predicted the nose, and the blue is the actual annotated point. </p>
+      <figure>
+         <img src="media/goodNose1.png" alt="face">
+         <figcaption>Predicted Nose</figcaption>
+      </figure>
+      <figure>
+         <img src="media/goodNose2.png" alt="face">
+         <figcaption>Predicted Nose</figcaption>
+      </figure>
+      <figure>
+         <img src="media/badNose1.png" alt="face">
+         <figcaption>Predicted Nose</figcaption>
+      </figure>
+      <figure>
+         <img src="media/badNose2.png" alt="face">
+         <figcaption>Predicted Nose</figcaption>
+      </figure>
+      <p> A possible explanation for why this occurred is the facial structure and orientation of the people in the images – as this would affect how well the model is able to predict the nose location.</p>
+    </section>
+    <section id = "face">
+      <h2> Full Facial Keypoints Detection</h2>
+      <p>With the nose tip detection working, the model can be expanded to predict all of the facial keypoints for an image. There are 58 keypoints annotated in the dataset. Some examples of the images and their corresponding annotations are shown below.</p>
+      <figure>
+         <img src="media/faceEx1.png" alt="face">
+         <figcaption>Example Annotated Image</figcaption>
+     </figure>
+     <figure>
+      <img src="media/faceEx2.png" alt="face">
+      <figcaption>Example Annotated Image</figcaption>
+     </figure>
+     <p>The convolutional neural network I trained had 5 convolutional layers, each with between 20-30 channels and a kernel size of 5. This was followed by two fully connected layers which got the output the be of size 58x2.</p>
+
+     <p>Loss for the dataset across the epochs are shown below.</p>
+     <figure>
+      <img src="media/noseloss.png" alt="face">
+      <figcaption>Loss Curve</figcaption>
+   </figure>
+
+     <p>Some examples of successful detections, and some unsuccessful detections, are shown below. The unsuccessful ones may be caused by more unique poses, orientations, or facial features.. </p>
+     <figure>
+      <img src="media/goodFace1.png" alt="face">
+      <figcaption>Predicted Keypoints (pretty good) </figcaption>
+   </figure>
+   <figure>
+      <img src="media/goodFace2.png" alt="face">
+      <figcaption>Predicted Keypoints (pretty good)</figcaption>
+   </figure>
+   <figure>
+      <img src="media/badFace1.png" alt="face">
+      <figcaption>Predicted Keypoints (not as good)</figcaption>
+   </figure>
+   <figure>
+      <img src="media/badFace2.png" alt="face">
+      <figcaption>Predicted Keypoints (not as good)</figcaption>
+   </figure>
+     <p>The following are some examples of what the filters look like – specifically in the first convolutional layer: </p>
+     <figure style="width: 45%;">
+      <img src="media/filters.png" alt="face">
+      <figcaption>Filters </figcaption>
+   </figure>
+    </section>
+
+    <section id = "large">
+      <h2>Training on a Larger Set</h2>
+      <p>The above examples are isolated to using just a small set of data for training and testing. Training a larger model on a larger set of data would alolow us to yield better results. The following section used a dataset of annotatied faces from the Intelligent Behavior Understanding Group (iBug) from Imperial College London. It contains over 6000 annotated faces, from all angles and backgrounds. The following are some example images with their annotations from the dataset:</p>
+      <figure>
+         <img src="media/exPhoto1.png" alt="face">
+         <figcaption>Example Annotated Image </figcaption>
+      </figure>
+      <figure>
+         <img src="media/exPhoto2.png" alt="face">
+         <figcaption>Example Annotated Image </figcaption>
+      </figure>
+      <figure>
+         <img src="media/exPhoto3.png" alt="face">
+         <figcaption>Example Annotated Image </figcaption>
+      </figure>
+      <p>The model I used in this section was a premade architecture in Pytorch – Resnet50. This is a large convolutional net that is 50 layers deep. It was only slightly altered to take in the correct size images and output the correct amount of points for facial annotations.</p>
+      <p>The loss for training this model is shown below.</p>
+      <figure>
+         <img src="media/bigLoss.png" alt="face">
+         <figcaption>Loss Graph</figcaption>
+      </figure>
+
+      <p>Below are some results from the model, both with images from the dataset, as well as with my own images that I gave to the model.</p>
+      <figure>
+         <img src="media/pred2.png" alt="face">
+         <figcaption>Predicted Facial Keypoints </figcaption>
+      </figure>
+      <figure>
+         <img src="media/pred1.png" alt="face">
+         <figcaption>Predicted Facial Keypoints</figcaption>
+      </figure>
+      <figure>
+         <img src="media/pred3.png" alt="face">
+         <figcaption>Predicted Facial Keypoints</figcaption>
+      </figure>
+      <br>
+      <figure>
+         <img src="media/custom3.png" alt="face">
+         <figcaption>Me</figcaption> 
+      </figure>
+      <figure>
+         <img src="media/custom1.png" alt="face">
+         <figcaption>George Michael Bluth (poor performance)</figcaption>
+      </figure>
+      <figure>
+         <img src="media/custom2.png" alt="face">
+         <figcaption>My Sunshine</figcaption>
+      </figure>
+    </section>
+
+    <section id = "pixel">
+      <h2>Pixelwise Classification</h2>
+      <p>Another task that neural networks can accomplish is a pixelwise classification of how likely a certain pixel is to be a keypoint on the face. I again used the Resnet50 model to predict how likely a point is to be a keypoint. This is a convolutional neural network that is 50 layers deep.</p>
+      <p>A 2D Gaussian around each keypoint was used with a standard deviation of 12. These values were summed to geneate heatmaps. Results are shown below - both on images from the dataset as well as my own.</p>
+      <figure>
+         <img src="media/heatmap1.png" alt="face">
+         <figcaption>Predicted Heatmap</figcaption>
+      </figure>
+      <figure>
+         <img src="media/heatmap2.png" alt="face">
+         <figcaption>Predicted Heatmap</figcaption>
+      </figure>
+      <figure>
+         <img src="media/heatmap3.png" alt="face">
+         <figcaption>Predicted Heatmap</figcaption>
+      </figure>
+      <br>
+      <figure>
+         <img src="media/heatmap4.png" alt="face">
+         <figcaption>Predicted Heatmap of me</figcaption>
+      </figure>
+      <figure>
+         <img src="media/heatmap5.png" alt="face">
+         <figcaption>Predicted Heatmap of Lucas</figcaption>
+      </figure>
+      <figure>
+         <img src="media/heatmap6.png" alt="face">
+         <figcaption>Predicted Heatmap of Aaron Judge</figcaption>
+      </figure>
+
+    </section>
+    
+    
+    <!-- Footer -->
+    <footer>
+      © 2024 Ajay Bhargava - Image Processing Techniques
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript for highlighting the active section in the sidebar
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const links = document.querySelectorAll('.sidebar a');
+
+      let currentSection = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === currentSection) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
