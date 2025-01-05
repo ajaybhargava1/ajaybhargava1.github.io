@@ -1,56 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ajay Bhargava - Personal Webpage</title>
+    
+    <!-- Google Fonts Import -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@300;400;600&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif; /* Poppins for body text */
+        background-color: #f5f5f5;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
 
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
+      header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
 
-        .portfolio-links {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+      h1 {
+        font-family: 'Merriweather', serif; /* Merriweather for headings */
+        font-size: 4rem;
+        margin: 0;
+        font-weight: 700;
+        color: #2c3e50;
+      }
 
-        a {
-            display: block;
-            padding: 10px;
-            margin: 10px 0;
-            text-decoration: none;
-            color: #3498db;
-            transition: background 0.3s;
-        }
+      p {
+        font-size: 1.2rem;
+        margin: 10px 0;
+        font-weight: 300;
+        font-family: 'Poppins', sans-serif; /* Poppins for paragraph */
+      }
 
-        a:hover {
-            background: #eaf1f8;
-            border-radius: 4px;
-        }
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        width: 80%;
+        margin: 20px 0;
+      }
+
+      .project {
+        padding: 15px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        font-family: 'Poppins', sans-serif; /* Poppins for project items */
+      }
+
+      .project:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .project a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif; /* Poppins for links */
+      }
+
+      .icons {
+        margin-top: 20px;
+      }
+
+      .icons a {
+        margin: 0 10px;
+        font-size: 1.5rem;
+        color: #555;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .icons a:hover {
+        color: #000;
+      }
+
+      .resume {
+        margin-top: 20px;
+      }
+
+      .resume a {
+        padding: 10px 20px;
+        border: 2px solid #333;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        color: #333;
+        font-family: 'Poppins', sans-serif; /* Poppins for resume link */
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .resume a:hover {
+        background-color: #333;
+        color: #fff;
+      }
     </style>
 </head>
+
 <body>
-    <h1>Ajay Bhargava: Portfolio</h1>
-    <div class="portfolio-links">
-        <a href="./1/index.html">Colorizing the Prokudin-Gorskii Photo Collection</a>
-        <a href="./2/index.html">Frequencies and Filters</a>
-        <a href="./3/index.html">Facial Morphing</a>
-        <a href="./4/index.html">Image Mosaics</a>
-        <a href="./5/index.html">Diffusion Models and Image Generation!</a>
-        <a href="./6/index.html">Facial Keypoing Detection with Neural Networks</a>
-        <a href="./7/index.html">Image Quilting and Texture Generation</a>
-    </div>
+  <header>
+    <h1>Ajay Bhargava</h1>
+    <p><a href="mailto:ajaybhargava@berkeley.edu">ajaybhargava@berkeley.edu</a></p>
+    <div class="icons">
+        <a href="https://linkedin.com/in/ajaybhargava137" target="_blank">🔗</a>
+        <a href="mailto:ajaybhargava@berkeley.edu">📧</a>
+        <a href="https://letterboxd.com/Sndhs13/" target="_blank">🎥 </a>
+        <a href="https://instagram.com/ajay.bhargava" target="_blank">📸</a>
+      </div>
+  </header>
+
+  <h2>Computational Photography Projects</h2>
+  <section class="projects">
+    <div class="project"><a href="./1/index.html">Colorizing the Prokudin-Gorskii Photo Collection</a></div>
+    <div class="project"><a href="./2/index.html">Frequencies and Filters</a></div>
+    <div class="project"><a href="./3/index.html">Facial Morphing</a></div>
+    <div class="project"><a href="./4/index.html">Image Mosaics</a></div>
+    <div class="project"><a href="./5/index.html">Diffusion Models and Image Generation!</a></div>
+    <div class="project"><a href="./6/index.html">Facial Keypoing Detection with Neural Networks</a></div>
+    <div class="project"><a href="./7/index.html">Image Quilting and Texture Generation</a></div>
+  </section>
+
+  <h2>Other Projects</h2>
+  <section class="projects">
+    <div class="project"><a href="#">Hats</a></div>
+    <div class="project"><a href="#">Crosswords</a></div>
+    <div class="project"><a href="https://www.youtube.com/watch?v=3517MQX1KOE">Dance</a></div>
+
+  </section>
+
+  <div class="resume">
+    <a href="resume.pdf" target="_blank">Resume</a>
+  </div>
 </body>
 </html>
