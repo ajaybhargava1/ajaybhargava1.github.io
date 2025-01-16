@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hats Collection - Ajay Bhargava</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        header {
+            margin: 50px 0 30px;
+        }
+
+        h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 3.5rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin: 10px 0 20px;
+            font-weight: 400;
+            color: #555;
+        }
+
+        p.description {
+            font-size: 1rem;
+            font-weight: 300;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .hat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .hat {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border: 3px solid #ddd;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hat:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .hat img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .hat-info {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            transition: opacity 0.3s ease;
+        }
+
+        .hat:hover .hat-info {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hats</h1>
+        <h2>By Ajay Bhargava</h2>
+        <p class="description">I collect hats. Hover over each one for info about it!</p>
+    </header>
+
+    <div class="hat-grid" id="hat-grid"></div>
+
+    <script>
+        const hats = [
+            { img: 'stlcardinals.png', info: 'A' },
+            { img: 'dreams.png', info: 'A' },
+            { img: 'signedBNP.png', info: 'A' },
+            { img: 'bayern.png', info: 'A' },
+            { img: 'paris.png', info: 'A' },
+            { img: 'bali.png', info: 'A' },
+            { img: 'yellowstone.png', info: 'A' },
+            { img: 'cubs.png', info: 'A' },
+            { img: 'emirates.png', info: 'A' },
+            { img: 'bearcub.png', info: 'A' },
+            { img: 'newmexico.png', info: 'A' },
+            { img: 'seattle2.png', info: 'A' },
+            { img: 'RSC.png', info: 'A' },
+            { img: 'nygiants.png', info: 'A' },
+            { img: 'masimo.png', info: 'A' },
+            { img: 'mataguay.png', info: 'A' },
+            { img: 'london.png', info: 'A' },
+            { img: 'thousandoaks.png', info: 'A' },
+            { img: 'UCSB.png', info: 'A' },
+            { img: 'cricket.png', info: 'A' },
+            { img: 'czech.png', info: 'A' },
+            { img: 'orioles.png', info: 'A' },
+            { img: 'lakers.png', info: 'A' },
+            { img: 'belgium.png', info: 'A' },
+            { img: 'rangers.png', info: 'A' },
+            { img: 'bees.png', info: 'A' },
+            { img: 'greenBNP.png', info: 'A' },
+            { img: 'espana.png', info: 'A' },
+            { img: 'panama.png', info: 'A' },
+            { img: 'grayCV.png', info: 'A' },
+            { img: 'wolf.png', info: 'A' },
+            { img: 'blueAlaska.png', info: 'A' },
+            { img: 'canada.png', info: 'A' },
+            { img: 'GM.png', info: 'A' },
+            { img: 'arches.png', info: 'A' },
+            { img: 'langranch.png', info: 'A' },
+            { img: 'greyAlaska.png', info: 'A' },
+            { img: 'bryce.png', info: 'A' },
+            { img: 'alcatraz.png', info: 'A' },
+            { img: 'blueCV.png', info: 'A' },
+            { img: 'webelos.png', info: 'A' },
+            { img: 'vegas.png', info: 'A' },
+            { img: 'italia.png', info: 'A' },
+            { img: 'luxembourg.png', info: 'A' },
+            { img: 'emeraldbay.png', info: 'A' },
+            { img: 'phillips.png', info: 'A' },
+            { img: 'redBNP.png', info: 'A' },
+            { img: 'phillies.png', info: 'A' },
+            { img: 'tigercub.png', info: 'A' },
+            { img: 'dubai.png', info: 'A' },
+            { img: 'singapore.png', info: 'A' },
+            { img: 'dbacks.png', info: 'A' },
+            { img: 'redCV.png', info: 'A' },
+            { img: 'ucsbvisor.png', info: 'A' },
+            { img: 'pelicans.png', info: 'A' },
+            { img: 'miami.png', info: 'A' },
+            { img: 'checkers.png', info: 'A' },
+            { img: 'whitsett.png', info: 'A' },
+            { img: 'NYY.png', info: 'A' },
+            { img: 'bcci.png', info: 'A' },
+            { img: 'japan.png', info: 'A' },
+            { img: 'dominican.png', info: 'A' },
+            { img: 'angels.png', info: 'A' },
+            { img: 'grandpa.png', info: 'A' },
+            { img: 'CAscience.png', info: 'A' },
+        ]
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function displayHats() {
+            const grid = document.getElementById('hat-grid');
+            shuffle(hats).forEach(hat => {
+                const hatElement = document.createElement('div');
+                hatElement.className = 'hat';
+                hatElement.innerHTML = `
+                    <img src="${hat.img}" alt="Hat">
+                    <div class="hat-info">${hat.info}</div>
+                `;
+                grid.appendChild(hatElement);
+            });
+        }
+
+        displayHats();
+    </script>
+</body>
+</html>
