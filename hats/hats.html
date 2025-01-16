@@ -200,7 +200,7 @@
                 const hatElement = document.createElement('div');
                 hatElement.className = 'hat';
                 hatElement.innerHTML = `
-                    <img src="${hat.img}" alt="Hat">
+                    <img src="${hat.img}" alt="Hat" loading="lazy">
                     <div class="hat-info">${hat.info}</div>
                 `;
                 grid.appendChild(hatElement);
