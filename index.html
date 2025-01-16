@@ -56,18 +56,24 @@
       }
 
       .project {
+        display: block;
         padding: 15px;
         border: 2px solid #ddd;
         border-radius: 8px;
         text-align: center;
         transition: transform 0.3s, box-shadow 0.3s;
-        font-family: 'Poppins', sans-serif; /* Poppins for project items */
+        font-family: 'Poppins', sans-serif; /* Reinstate the Poppins font */
+        font-size: 1rem; /* Adjust the font size as needed */
+        font-weight: 600; /* Reinstate bold weight for titles */
+        color: #333; /* Keep text color consistent */
+        text-decoration: none; /* Remove underline */
       }
 
       .project:hover {
         transform: translateY(-5px);
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       }
+
 
       .project a {
         text-decoration: none;
@@ -135,22 +141,21 @@
 
   <h2>Things I've Made</h2>
   <section class="projects">
-    <div class="project"><a href="./hats/hats.html">Hats</a></div>
-    <div class="project"><a href="#">Crosswords</a></div>
-    <div class="project"><a href="https://www.youtube.com/watch?v=3517MQX1KOE">Dance</a></div>
-    <div class="project"><a href="https://letterboxd.com/Sndhs13/">Film Reviews</a></div>
-
+    <a href="./hats/hats.html" class="project">Hats</a>
+    <a href="#" class="project">Crosswords</a>
+    <a href="https://www.youtube.com/watch?v=3517MQX1KOE" class="project">Dance</a>
+    <a href="https://letterboxd.com/Sndhs13/" class="project">Film Reviews</a>
   </section>
-
+  
   <h2>Computational Photography Projects</h2>
   <section class="projects">
-    <div class="project"><a href="./1/index.html">Colorizing the Prokudin-Gorskii Photos</a></div>
-    <div class="project"><a href="./2/index.html">Frequencies and Filters</a></div>
-    <div class="project"><a href="./3/index.html">Facial Morphing</a></div>
-    <div class="project"><a href="./4/index.html">Image Mosaics</a></div>
-    <div class="project"><a href="./5/index.html">Diffusion Models and Image Generation!</a></div>
-    <div class="project"><a href="./6/index.html">Facial Keypoing Detection with Neural Networks</a></div>
-    <div class="project"><a href="./7/index.html">Image Quilting and Texture Generation</a></div>
+    <a href="./1/index.html" class="project">Colorizing the Prokudin-Gorskii Photos</a>
+    <a href="./2/index.html" class="project">Frequencies and Filters</a>
+    <a href="./3/index.html" class="project">Facial Morphing</a>
+    <a href="./4/index.html" class="project">Image Mosaics</a>
+    <a href="./5/index.html" class="project">Diffusion Models and Image Generation!</a>
+    <a href="./6/index.html" class="project">Facial Keypoing Detection with Neural Networks</a>
+    <a href="./7/index.html" class="project">Image Quilting and Texture Generation</a>
   </section>
 
   
