@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crosswords</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        header {
+            margin: 50px 0 30px;
+        }
+
+        h1 {
+            font-family: 'Merriweather', serif;
+            font-size: 3.5rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin: 10px 0 20px;
+            font-weight: 400;
+            color: #555;
+        }
+
+        p.description {
+            font-size: 1rem;
+            font-weight: 300;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .hat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .hat {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border: 3px solid #ddd;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hat:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .hat img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .hat-info {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            transition: opacity 0.3s ease;
+        }
+
+        .hat:hover .hat-info {
+            opacity: 1;
+        }
+
+        .hat-preview {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            border: 5px solid #ddd;
+            z-index: 1000;
+            background-color: #fff;
+            padding: 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hat-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .hat-preview .hat-text {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: 400;
+            max-width: 80%;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        .close-btn:focus {
+            outline: none;
+        }
+
+        .hat-preview.active {
+            display: flex;
+        }
+
+        .hat-grid .hat {
+            pointer-events: auto;
+        }
+
+        .hat-preview .hat-grid.disabled .hat {
+            filter: grayscale(100%) blur(3px);
+            pointer-events: none;
+        }
+
+        body.preview-open {
+            overflow: hidden;
+        }
+
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 500;
+            display: none;
+        }
+
+        .background-overlay.active {
+            display: block;
+        }
+
+        .custom-link {
+            color: #0073e6; /* A shade of blue that stands out but is readable */
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .custom-link:hover {
+            text-decoration: underline;
+            color: #004c99; /* A slightly darker shade for hover effect */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Crosswords</h1>
+        <h2>By Ajay Bhargava</h2>
+        <p class="description">
+            I write crosswords. I've been published on sources such as 
+            <a href="https://www.latimes.com/" class="custom-link">Los Angeles Times</a> and 
+            <a href="https://www.sporcle.com/" class="custom-link">Sporcle</a> – and I used to write the weekly crossword for 
+            <a href="https://www.dailycal.org/" class="custom-link">The Daily Californian</a> newspaper.<br>
+            Here are some crosswords I wrote below: 
+        </p>
+        <p>If there are no crosswords posted here yet, you can play one I've made at
+            <a href="https://crosswordr.com/a/puzzle/2d3V66d4c7c1ih54" class="custom-link">this link!</a>
+            </p>
+    </header>
+</body>
+</html>
