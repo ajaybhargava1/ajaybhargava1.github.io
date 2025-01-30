@@ -210,6 +210,28 @@
             text-decoration: underline;
             color: #004c99; /* A slightly darker shade for hover effect */
         }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1rem;
+            font-weight: 400;
+            text-decoration: none;
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .home-button:hover {
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+
     </style>
 </head>
 <body>
@@ -225,7 +247,10 @@
         </p>
         <p>If there are no crosswords posted here yet, you can play one I've made at
             <a href="https://crosswordr.com/a/puzzle/2d3V66d4c7c1ih54" class="custom-link">this link!</a>
-            </p>
+        </p>
+        <a href="/" class="home-button">← Home</a>
+
     </header>
+    
 </body>
 </html>
